@@ -8,14 +8,14 @@
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <form class="d-flex" role="search">
-                    <input class="form-control" type="search" placeholder="Título de película" aria-label="Search">
-                    <button class="btn btn-danger ms-3">
-                        <img src="../../../assets/magnifying-glass.png" alt="search icon">
+            <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                <div class="d-flex" role="search">
+                    <input [(ngModel)]="query" id="query" class="form-control" placeholder="Título de película" aria-label="Search" (keydown)="handleKeyDown($event)">
+                    <button class="btn btn-danger ms-3" (click)="search()">
+                      <img src="../../../assets/magnifying-glass.png" alt="search icon">
                     </button>
-                </form>
-            </ul>
+                </div>
+            </div>
             <button class="btn btn-danger m-1">Iniciar sesión</button>
             <button class="btn btn-danger m-1">Registro</button>
       </div>

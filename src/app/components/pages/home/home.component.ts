@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { carouselMovie } from 'src/app/models/carouselMovie';
-import { moviePoster } from 'src/app/models/moviePoster';
+import { Router } from '@angular/router';
+import { CarouselMovie } from 'src/app/models/carouselMovie';
+import { MoviePoster } from 'src/app/models/moviePoster';
 import { MovieService } from 'src/app/services/movie.service';
+import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'app-home',
@@ -10,10 +12,13 @@ import { MovieService } from 'src/app/services/movie.service';
 })
 export class HomeComponent {
 
-  carousel: carouselMovie[] = []
-  list: moviePoster[] = []
+  carousel: CarouselMovie[] = []
+  list: MoviePoster[] = []
 
-  constructor(private movieService: MovieService){}
+  constructor(
+    private movieService: MovieService,          
+    private router: Router
+  ){}
 
   ngOnInit(){
     this.movieService.getCarousel().subscribe((value) => {

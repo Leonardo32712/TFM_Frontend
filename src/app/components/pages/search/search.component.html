@@ -1,0 +1,6 @@
+<h2 class="search-title">Resultados para: {{this.query}}</h2>
+<div class="movie-list">
+    <div *ngFor="let movie of results" class="movie-card">
+        <a href=""><img [src]="movie.poster_path" class="movie-poster" [alt]="movie.title + ' poster'"></a>
+    </div>
+</div>
