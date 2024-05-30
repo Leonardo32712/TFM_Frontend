@@ -1,1 +1,39 @@
-<p>home works!</p>
+<div id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button *ngFor="let movie of carousel; let i = index"
+              type="button"
+              data-bs-target="#homeCarousel"
+              [attr.data-bs-slide-to]="i"
+              [class.active]="i === 0"
+              [attr.aria-current]="i === 0 ? 'true' : null"
+              [attr.aria-label]="'Slide ' + (i + 1)">
+      </button>
+    </div>
+    <div class="carousel-inner">
+      <div *ngFor="let movie of carousel; let i = index" [class.active]="i === 0" class="carousel-item">
+        <div class="image-container">
+          <img [src]="movie.backdrop_path" class="d-block w-100" [alt]="movie.title + ' background'">
+          <div class="overlay"></div>
+          <div class="carousel-caption d-none d-md-block">
+            <h1>{{ movie.title }}</h1>
+            <p>{{ movie.overview }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  
+  <div class="movie-list">
+    <div *ngFor="let movie of list" class="movie-card">
+      <a href=""><img [src]="movie.poster_path" class="movie-poster" [alt]="movie.title + ' poster'"></a>
+    </div>
+  </div>
+  

@@ -1,0 +1,62 @@
+/* styles.css */
+
+.carousel-item {
+    height: 400px; /* Ajusta esta altura según sea necesario */
+}
+
+.image-container {
+    position: relative;
+    height: 100%;
+}
+
+.image-container img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 5%; /* Ajusta según tus necesidades */
+    right: 15%; /* Ajusta según tus necesidades */
+    left: 15%; /* Asegura que el texto no esté centrado */
+    text-align: left; /* Alinea el texto a la derecha */
+    color: white; /* Color del texto */
+  }
+  
+  .carousel-caption h1 {
+    font-size: 2rem; /* Ajusta el tamaño del texto */
+  }
+  
+  .carousel-caption p {
+    font-size: 1rem; /* Ajusta el tamaño del texto */
+  }
+
+  .movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  
+  .movie-card {
+    margin: 1%;
+    text-align: center;
+    width: 16%; /* Ajusta el ancho según sea necesario */
+  }
+  
+  .movie-card img {
+    width: 100%;
+    height: auto;
+  }
+  
