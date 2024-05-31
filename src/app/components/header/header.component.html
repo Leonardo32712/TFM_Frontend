@@ -16,8 +16,12 @@
                     </button>
                 </div>
             </div>
-            <a class="btn btn-danger m-1" href="/login">Iniciar sesión</a>
-            <a class="btn btn-danger m-1">Registro</a>
+            <a *ngIf="!this.userLogged" class="btn btn-danger m-1" href="/login">Iniciar sesión</a>
+            <a *ngIf="!this.userLogged" class="btn btn-danger m-1">Registro</a>
+            <a *ngIf="this.userLogged" class="btn btn-danger m-1 user-info">
+                <img src="{{this.photoURL}}" alt="User Image" class="user-image">
+                {{this.displayName}}
+            </a>
       </div>
     </div>
   </nav>

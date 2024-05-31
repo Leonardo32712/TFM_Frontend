@@ -1,0 +1,12 @@
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-image {
+    width: 30px; /* Ajusta el tamaño según sea necesario */
+    height: 30px; /* Asegúrate de que la altura y el ancho sean iguales */
+    border-radius: 50%; /* Esto hace que la imagen sea redonda */
+    object-fit: cover; /* Esto asegura que la imagen se recorte para llenar el contenedor */
+    margin-right: 10px; /* Espacio entre la imagen y el nombre */
+}

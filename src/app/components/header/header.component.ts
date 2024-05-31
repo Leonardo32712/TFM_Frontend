@@ -8,11 +8,20 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent {
 
-  public query: string = ''
+  query: string = ''
+  displayName: string = ''
+  photoURL: string = ''
+  userLogged: boolean = false
 
   constructor(
     private router: Router
   ){}
+
+  ngOnInit(){
+    this.displayName = localStorage.getItem('displayName') || ''
+    this.photoURL = localStorage.getItem('photoURL') || ''
+    this.userLogged = localStorage.getItem('idToken') != null
+  }
 
   search() {
     localStorage.setItem('q', this.query)
