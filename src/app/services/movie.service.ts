@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CarouselMovie } from '../models/carouselMovie';
 import { MoviePoster } from '../models/moviePoster';
 
