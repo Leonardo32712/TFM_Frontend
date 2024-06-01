@@ -37,7 +37,12 @@ export class LoginComponent {
         })
       })
       .catch((error) => {
-        console.error('Login error:', error);
+        Swal.fire({
+          title: 'Sesión no iniciada',
+          text: error,
+          icon: 'error',
+          showConfirmButton: false
+        })
       });
   }
 }

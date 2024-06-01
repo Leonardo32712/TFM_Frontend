@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="/" (onClick)="showButtons = true">
             <img src="../../../assets/clapperboard.png" width="30" height="30" class="d-inline-block align-top" alt="">
             MovieMeter
         </a>
@@ -16,8 +16,8 @@
                     </button>
                 </div>
             </div>
-            <a *ngIf="!this.userLogged" class="btn btn-danger m-1" href="/login">Iniciar sesión</a>
-            <a *ngIf="!this.userLogged" class="btn btn-danger m-1">Registro</a>
+            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/login" (onClick)="showButtons = false">Iniciar sesión</a>
+            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/signup" (onClick)="showButtons = false">Registro</a>
             <a *ngIf="this.userLogged" class="btn btn-danger m-1 user-info">
                 <img src="{{this.photoURL}}" alt="User Image" class="user-image">
                 {{this.displayName}}
