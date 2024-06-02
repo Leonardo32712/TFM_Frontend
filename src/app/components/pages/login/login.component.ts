@@ -35,8 +35,7 @@ export class LoginComponent {
         }).then(() => {
           window.location.reload()
         })
-      })
-      .catch((error) => {
+      }).catch((error) => {
         Swal.fire({
           title: 'Sesión no iniciada',
           text: error,
