@@ -4,79 +4,22 @@ import { Auth, idToken, signInWithEmailAndPassword, user } from '@angular/fire/a
 import { basicUser } from '../models/basicUser';
 import { HttpClient} from '@angular/common/http';
 import { userProfile } from '../models/userProfile';
+import { logInWithEmailAndPasswordController, singUpController } from '../controllers/auth.controller';
+import { signUpUser } from '../models/signUpUser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  afAuth = inject(Auth)
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private afAuth: Auth) { }
 
-  public async logInEmailAndPassword(email: string, password: string): Promise<basicUser> {
-    try {
-      const userCredentials = await signInWithEmailAndPassword(this.afAuth, email, password);
-      if (userCredentials.user != null) {
-        const displayName = userCredentials.user.displayName;
-        const photoURL = userCredentials.user.photoURL;
-        const idToken = await userCredentials.user.getIdToken(true);
-        return {
-          displayName: displayName,
-          photoURL: photoURL,
-          idToken: idToken
-        };
-      } else {
-        return Promise.reject('Usuario no encontrado');
-      }
-    } catch (error) {
-      const errorCode = (error as any).code;
-      switch (errorCode) {
-          case 'auth/invalid-credential':
-            return Promise.reject('Las credenciales ingresadas son incorrectas.')
-          case 'auth/invalid-email':
-            return Promise.reject('El correo electrónico ingresado no es válido.')
-          case 'auth/missing-password':
-            return Promise.reject('La contraseña no ha sido introducida')
-          default:
-            return Promise.reject('Ha ocurrido un error al intentar iniciar sesión. Por favor, intentalo de nuevo más tarde.')
-        }
-    }
+  public logInEmailAndPassword(email: string, password: string): Promise<string> {
+    return logInWithEmailAndPasswordController(this.afAuth, email, password)
   }
 
-  async signUp(username: string, email: string, password: string, profilePic: File | null): Promise<string> {
-    const formData: FormData = new FormData();
-    formData.append('displayName', username);
-    formData.append('email', email);
-    formData.append('password', password);
-    if (profilePic) {
-        formData.append('photoURL', profilePic, profilePic.name);
-    }
-
-    return new Promise<string>((resolve, reject) => {
-      this.http.post('http://localhost:3000/users/signup', formData, { observe: 'response' })
-          .subscribe({
-              next: (response) => {
-                resolve(response.statusText || 'Registro exitoso.');
-              },
-              error: (error) => {
-                  const errorCode = (error as any).error.code;
-                  switch (errorCode) {
-                      case 'backend/invalid-email':
-                        reject('El correo introducido no tiene un formato válido.');
-                        break;
-                      case 'auth/invalid-password':
-                        reject('La contraseña debe tener al menos 6 caracteres.');
-                        break;
-                      case 'auth/email-already-exists':
-                        reject('El correo introducido pertenece a una cuenta existente.');
-                        break;
-                      default:
-                        reject('Ha ocurrido un error al intentar registrar su usuario. Por favor, inténtelo de nuevo más tarde.');
-                        break;
-                  }
-              }
-          });
-    });
+  async signUp(user: signUpUser): Promise<string> {
+    return singUpController(this.http, user)
   }
 
   getUserData(): Promise<userProfile>{

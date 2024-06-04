@@ -26,10 +26,11 @@ export class LoginComponent {
 
   public loginEmailAndPassword() {
     this.auth.logInEmailAndPassword(this.email, this.password)
-      .then((_credentials) => {
+      .then((message) => {
         Swal.fire({
           title: 'Sesión iniciada',
           icon: 'success',
+          text: message,
           timer: 2500,
           showConfirmButton: false
         }).then(() => {

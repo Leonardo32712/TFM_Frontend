@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { signUpUser } from 'src/app/models/signUpUser';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
 
@@ -43,11 +44,18 @@ export class SignupComponent {
       return;
     }
 
-    this.auth.signUp(this.username, this.email, this.password, this.profilePic)
-      .then(() => {
+    const userRegister: signUpUser = {
+      username: this.username,
+      email: this.email,
+      password: this.password,
+      profilePic: this.profilePic
+    }
+
+    this.auth.signUp(userRegister)
+      .then((message) => {
         Swal.fire({
           title: 'Registro completado', 
-          text: 'Su cuenta ha sido creada', 
+          text: message, 
           icon: 'success'
         }).then(() => {
           this.router.navigate(['/login']);
