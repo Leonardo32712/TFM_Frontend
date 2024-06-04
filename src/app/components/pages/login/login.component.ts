@@ -18,7 +18,7 @@ export class LoginComponent {
 
   ngOnInit(){
     this.auth.getBasicUserData().then((user) => {
-      if(user.idToken){
+      if(user){
         this.router.navigate(['/home'])
       }
     })

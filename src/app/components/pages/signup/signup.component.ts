@@ -21,7 +21,7 @@ export class SignupComponent {
 
   ngOnInit(){
     this.auth.getBasicUserData().then((user) => {
-      if(user.idToken){
+      if(user){
         this.router.navigate(['/home'])
       }
     })

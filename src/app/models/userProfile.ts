@@ -3,5 +3,4 @@ export interface userProfile {
     emailVerified: boolean
     displayName: string | null;
     photoURL: string | null;
-    idToken: string;
 }
