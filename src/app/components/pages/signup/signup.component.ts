@@ -19,8 +19,11 @@ export class SignupComponent {
   constructor(private auth: AuthService, private router: Router){}
 
   ngOnInit(){
-    if(localStorage.getItem('idToken'))
-      this.router.navigate(['/home'])
+    this.auth.getBasicUserData().then((user) => {
+      if(user.idToken){
+        this.router.navigate(['/home'])
+      }
+    })
   }
 
   signUp(){

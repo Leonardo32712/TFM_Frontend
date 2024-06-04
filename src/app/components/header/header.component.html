@@ -16,11 +16,12 @@
                     </button>
                 </div>
             </div>
+            <a *ngIf="!this.userLogged && !showButtons" class="btn btn-danger m-1" href="/home" (onClick)="showButtons = true">Página principal</a>
             <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/login" (onClick)="showButtons = false">Iniciar sesión</a>
             <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/signup" (onClick)="showButtons = false">Registro</a>
-            <a *ngIf="this.userLogged" class="btn btn-danger m-1 user-info">
-                <img src="{{this.photoURL}}" alt="User Image" class="user-image">
-                {{this.displayName}}
+            <a *ngIf="this.userLogged" class="btn btn-danger m-1 user-info" href="/profile">
+                <img src="{{this.user.photoURL}}" alt="User Image" class="user-image">
+                {{this.user.displayName}}
             </a>
       </div>
     </div>

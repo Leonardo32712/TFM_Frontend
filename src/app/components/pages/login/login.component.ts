@@ -17,16 +17,16 @@ export class LoginComponent {
   constructor(private auth: AuthService, private router: Router){}
 
   ngOnInit(){
-    if(localStorage.getItem('idToken'))
-      this.router.navigate(['/home'])
+    this.auth.getBasicUserData().then((user) => {
+      if(user.idToken){
+        this.router.navigate(['/home'])
+      }
+    })
   }
 
   public loginEmailAndPassword() {
     this.auth.logInEmailAndPassword(this.email, this.password)
-      .then((cred) => {
-        localStorage.setItem('idToken', cred.idToken)
-        localStorage.setItem('displayName', cred.displayName || this.email)
-        localStorage.setItem('photoURL', cred.photoURL || FB_IMAGE_URL_DEFAULT)
+      .then((_credentials) => {
         Swal.fire({
           title: 'Sesión iniciada',
           icon: 'success',

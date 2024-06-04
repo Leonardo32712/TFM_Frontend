@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { basicUser } from 'src/app/models/basicUser';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -8,20 +10,23 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class HeaderComponent {
 
+  user: basicUser = {} as basicUser
   query: string = ''
-  displayName: string = ''
-  photoURL: string = ''
   userLogged: boolean = false
   showButtons: boolean = true
 
   constructor(
+    private auth: AuthService,
     private router: Router
   ){}
 
   ngOnInit(){
-    this.displayName = localStorage.getItem('displayName') || ''
-    this.photoURL = localStorage.getItem('photoURL') || ''
-    this.userLogged = localStorage.getItem('idToken') != null
+    this.auth.getBasicUserData()
+    .then((userData) => {
+      this.user = userData
+      this.userLogged = true
+    }).catch(() => this.userLogged = false)
+
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         const currentRoute = event.urlAfterRedirects;
