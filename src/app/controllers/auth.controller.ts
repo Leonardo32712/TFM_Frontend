@@ -23,10 +23,12 @@ export const singUpController = ((http: HttpClient, user: signUpUser): Promise<s
         formData.append('email', user.email);
         formData.append('password', user.password);
         if (user.profilePic) {
-            formData.append('photoURL', user.profilePic);
+            formData.append('photo', user.profilePic, user.profilePic.name);
         }
 
-        http.post('http://localhost:3000/users/signup', formData, { observe: 'response' })
+        http.post('http://localhost:3000/users/signup', formData, { 
+            observe: 'response'
+        })
         .subscribe({
             next: (response) => {
                 if(response.status == 201) {
@@ -49,7 +51,7 @@ export const getUserProfileController = ((auth: Auth): Promise<userProfile> => {
               email: loggedUser.email,
               emailVerified: loggedUser.emailVerified,
               displayName: loggedUser.displayName,
-              photoURL: loggedUser.photoURL,
+              photoURL: loggedUser.photoURL
             }
             resolve (user);
           } else {

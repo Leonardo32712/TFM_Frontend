@@ -23,8 +23,8 @@
 									[(ngModel)]="this.confirmPassword">
 							</div>
                             <div class="form-group mb-3">
-                                <p class="text-light">Foto de perfil:</p>
-								<input name="password2" type="file" class="form-control" placeholder="Confirmar contraseña" required=""
+                                <label for="profilePic" class="form-label text-light">Foto de perfil</label>
+								<input id="profilePic" type="file" (change)="onFileSelected($event)" class="form-control" placeholder="Foto de perfil" required="" accept="image/*"
 									[(ngModel)]="this.profilePic">
 							</div>
 							<button id="logInBtn" (click)="signUp()" type="button"

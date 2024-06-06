@@ -27,6 +27,13 @@ export class SignupComponent {
     })
   }
 
+  onFileSelected(event: Event){
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.profilePic = input.files[0];
+    }
+  }
+
   signUp(){
     if (!this.username || !this.email || !this.password || !this.confirmPassword) {
       Swal.fire({

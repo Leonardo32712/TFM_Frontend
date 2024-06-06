@@ -15,6 +15,7 @@ export const logInControllerErrorHandler = ((error: any): string => {
 }) 
 
 export const signUpControllerErrorHandler = ((error: any): string => {
+    console.log(error)
     const errorCode = (error as any).error.code;
     switch (errorCode) {
         case 'backend/invalid-email':
