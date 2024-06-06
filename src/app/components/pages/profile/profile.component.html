@@ -1,2 +1,63 @@
-<p class="text-white">user data: {{this.userProfile | json}}</p>
-<a class="btn btn-danger m-1" (click)="logOut()">logout</a>
+<div class="container rounded bg-dark mt-5 text-white">
+    <div class="text-center pt-5">
+        <h1 class="text-right">Perfil de usuario</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 position-relative">
+                <img class="rounded-circle mt-3" width="150px" [src]="userProfile.photoURL">
+                <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none" />
+            </div>
+        </div>
+        <div class="col-md-7 border-right">
+            <div class="p-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="labels">Nombre de usuario</h5>
+                        <input type="text" class="form-control" [(ngModel)]="this.editedUserProfile.displayName"
+                            [disabled]="this.readMode" />
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5 class="labels">Correo electrónico</h5>
+                        <input type="text" class="form-control" [(ngModel)]="this.editedUserProfile.email"
+                            [disabled]="this.readMode" />
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5 class="labels">Rol</h5>
+                        <input type="text" class="form-control" value="Espectador" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="m-5 text-center">
+            <p *ngIf="uploadedFile">Imagen subida: {{uploadedFile.name}}</p>
+            <button *ngIf="readMode" class="btn btn-danger m-1" (click)="changeMode()">
+                Editar perfil
+            </button>
+            <button *ngIf="!readMode" class="btn btn-danger m-1" (click)="changeMode()">
+                Cancelar
+            </button>
+            <button *ngIf="!readMode" class="btn btn-danger m-1" (click)="fileInput.click(); onFileSelected($event)">
+                Cambiar foto
+            </button>
+            <button *ngIf="!readMode" class="btn btn-danger m-1" (click)="updateProfile()">
+                Guardar cambios
+            </button>
+            <button *ngIf="readMode" class="btn btn-danger m-1" (click)="requestVerification()">
+                Solicitar verificación
+            </button>
+            <button *ngIf="readMode" class="btn btn-danger m-1" (click)="deleteAccount()">
+                Eliminar cuenta
+            </button>
+            <button *ngIf="readMode" class="btn btn-danger m-1" (click)="logOut()">
+                Cerrar sesión
+            </button>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
