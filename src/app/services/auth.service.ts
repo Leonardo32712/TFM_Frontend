@@ -3,7 +3,7 @@ import { Auth } from '@angular/fire/auth';
 import { basicUser } from '../models/basicUser';
 import { HttpClient} from '@angular/common/http';
 import { userProfile } from '../models/userProfile';
-import { getBasicUserDataController, getUserProfileController, logInWithEmailAndPasswordController, logOutController, singUpController } from '../controllers/auth.controller';
+import { deleteAccountController, getBasicUserDataController, getUserProfileController, logInWithEmailAndPasswordController, logOutController, singUpController } from '../controllers/auth.controller';
 import { signUpUser } from '../models/signUpUser';
 
 @Injectable({
@@ -29,7 +29,11 @@ export class AuthService {
     return getBasicUserDataController(this.afAuth)
   }
 
-  logOut(){
+  public logOut(){
     return logOutController(this.afAuth)
+  }
+
+  public deleteAccount(){
+    return deleteAccountController(this.http, this.afAuth)
   }
 }
