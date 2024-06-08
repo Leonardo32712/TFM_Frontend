@@ -18,6 +18,7 @@ import { SignupComponent } from './components/pages/signup/signup.component';
 import { AuthService } from './services/auth.service';
 
 import { environment } from '../environments/environment';
+import { MovieComponent } from './components/pages/movie/movie.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { environment } from '../environments/environment';
     ProfileComponent,
     SearchComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    MovieComponent
   ],
   imports: [
     HttpClientModule,

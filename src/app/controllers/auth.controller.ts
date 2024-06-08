@@ -13,7 +13,7 @@ export const logInWithEmailAndPasswordController = ((auth: Auth, email: string, 
                 userCredentials.user.getIdToken().then((idtoken) => {
                     localStorage.setItem('idtoken', idtoken)
                 })
-                resolve('Sesión iniciada correctamente. Redirigiendo a la página principal...')
+                resolve('Sesión iniciada correctamente.')
             }).catch((error: any) => {
                 reject(logInControllerErrorHandler(error))
             })

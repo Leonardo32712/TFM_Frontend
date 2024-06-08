@@ -39,7 +39,9 @@ export class SignupComponent {
       Swal.fire({
         title: 'Error', 
         text: 'Todos los campos son obligatorios', 
-        icon: 'error'});
+        icon: 'error',
+        showCloseButton: true
+      });
       return;
     }
 
@@ -47,7 +49,9 @@ export class SignupComponent {
       Swal.fire({
         title: 'Error', 
         text: 'Las contraseñas no coinciden', 
-        icon: 'error'});
+        icon: 'error',
+        showCloseButton: true
+      });
       return;
     }
 
@@ -58,12 +62,21 @@ export class SignupComponent {
       profilePic: this.profilePic
     }
 
+    Swal.fire({
+      title: 'Registrando cuenta...',
+      text: 'Por favor espere.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
     this.auth.signUp(userRegister)
       .then((message) => {
         Swal.fire({
           title: 'Registro completado', 
           text: message, 
-          icon: 'success'
+          icon: 'success',
+          showCloseButton: true
         }).then(() => {
           this.router.navigate(['/login']);
         });
@@ -72,7 +85,9 @@ export class SignupComponent {
         Swal.fire({
           title: 'Error', 
           text: error, 
-          icon: 'error'});
+          icon: 'error',
+          showCloseButton: true
+        });
       });
   }
 }

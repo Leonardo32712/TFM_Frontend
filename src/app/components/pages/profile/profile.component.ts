@@ -60,7 +60,7 @@ export class ProfileComponent {
       if (result.isConfirmed) {
         Swal.fire({
           title: 'Eliminando cuenta...',
-          text: 'Por favor espere',
+          text: 'Por favor espere.',
           allowOutsideClick: false,
           didOpen: () => {
             Swal.showLoading();
@@ -79,7 +79,8 @@ export class ProfileComponent {
           Swal.fire({
             title: 'Error',
             text: error,
-            icon: 'error'
+            icon: 'error',
+            showCloseButton: true
           });
         });
       }

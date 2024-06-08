@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { FB_IMAGE_URL_DEFAULT } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -25,14 +24,21 @@ export class LoginComponent {
   }
 
   public loginEmailAndPassword() {
+    Swal.fire({
+      title: 'Iniciando sesión...',
+      text: 'Por favor espere.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
     this.auth.logInEmailAndPassword(this.email, this.password)
       .then((message) => {
         Swal.fire({
           title: 'Sesión iniciada',
           icon: 'success',
           text: message,
-          timer: 2500,
-          showConfirmButton: false
+          showCloseButton: true
         }).then(() => {
           window.location.reload()
         })
@@ -41,7 +47,7 @@ export class LoginComponent {
           title: 'Sesión no iniciada',
           text: error,
           icon: 'error',
-          showConfirmButton: false
+          showCloseButton: true
         })
       });
   }
