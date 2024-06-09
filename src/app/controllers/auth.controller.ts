@@ -1,5 +1,5 @@
 import { Auth, signInWithEmailAndPassword, user } from "@angular/fire/auth"
-import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "./auth.error.controller"
+import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "./auth.controller.error"
 import { signUpUser } from "../models/signUpUser"
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { userProfile } from "../models/userProfile"

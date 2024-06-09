@@ -1,1 +1,24 @@
-<p>movie works!</p>
+<div class="movie-detail text-white">
+    <h1>{{ movie.title }} ({{ movie.release_date | date: 'yyyy' }})</h1>
+    <img [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + movie.poster_path" alt="{{ movie.title }}">
+    <p>{{ movie.overview }}</p>
+  
+    <h2>Details</h2>
+    <ul>
+      <li><strong>Runtime:</strong> {{ movie.runtime }} minutes</li>
+      <li><strong>Budget:</strong> {{ movie.budget | currency }}</li>
+      <li><strong>Revenue:</strong> {{ movie.revenue | currency }}</li>
+      <li><strong>Status:</strong> {{ movie.status }}</li>
+      <li><strong>Genres:</strong> {{ movie.genres | json}}</li>
+    </ul>
+  
+    <h2>Reviews</h2>
+    <div class="reviews">
+        <div *ngFor="let reviewId of getReviewIds()" class="review">
+          <img *ngIf="reviews[reviewId].photoURL" [src]="reviews[reviewId].photoURL" alt="{{ reviews[reviewId].username }}">
+          <p><strong>{{ reviews[reviewId].username }}</strong> rated it {{ reviews[reviewId].score }}/5</p>
+          <p>{{ reviews[reviewId].review }}</p>
+        </div>
+    </div>
+  </div>
+  

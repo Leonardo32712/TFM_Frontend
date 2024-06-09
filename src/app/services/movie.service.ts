@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { CarouselMovie } from '../models/carouselMovie';
-import { MoviePoster } from '../models/moviePoster';
-import { BACKEND_URL } from 'src/environments/environment';
+import { Injectable } from '@angular/core';
+import { getCarouselController, getHomeListController, getMovieController, searchMovieController } from '../controllers/movie.controller';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +10,18 @@ export class MovieService {
   constructor(private http: HttpClient){}
 
   public getCarousel() {
-    return this.http.get<CarouselMovie[]>(BACKEND_URL + '/movies/carousel')
+    return getCarouselController(this.http)
   }
 
   public getHomeList() {
-    return this.http.get<MoviePoster[]>(BACKEND_URL + '/movies/home-list')
+    return getHomeListController(this.http)
   }
 
   public searchMovie(query: string, page: number) {
-    return this.http.get<MoviePoster[]>(BACKEND_URL + '/movies/search?q=' + query + '&p=' + page)
+    return searchMovieController(this.http, query, page)
+  }
+
+  public getMovie(movieId: string){
+    return getMovieController(this.http, movieId)
   }
 }
