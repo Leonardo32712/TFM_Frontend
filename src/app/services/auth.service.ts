@@ -21,19 +21,19 @@ export class AuthService {
     return singUpController(this.http, user)
   }
 
-  public getUserProfile(): Promise<userProfile>{
+  public getUserProfile(): Promise<userProfile> {
     return getUserProfileController(this.afAuth)
   }
 
-  public getBasicUserData(): Promise<basicUser>{
+  public getBasicUserData(): Promise<basicUser|undefined> {
     return getBasicUserDataController(this.afAuth)
   }
 
-  public logOut(){
+  public logOut() {
     return logOutController(this.afAuth)
   }
 
-  public deleteAccount(){
+  public deleteAccount() {
     return deleteAccountController(this.http, this.afAuth)
   }
 }

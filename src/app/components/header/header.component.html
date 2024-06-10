@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/" (onClick)="showButtons = true">
-            <img src="../../../assets/clapperboard.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            <img src="/assets/clapperboard.png" width="30" height="30" class="d-inline-block align-top" alt="">
             MovieMeter
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,7 +12,7 @@
                 <div class="d-flex" role="search">
                     <input [(ngModel)]="query" id="query" class="form-control" placeholder="Título de película" aria-label="Search" (keydown)="handleKeyDown($event)">
                     <button class="btn btn-danger ms-3" (click)="search()">
-                      <img src="../../../assets/magnifying-glass.png" alt="search icon">
+                      <img src="/assets/magnifying-glass.png" alt="search icon">
                     </button>
                 </div>
             </div>

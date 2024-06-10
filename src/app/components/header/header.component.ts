@@ -23,8 +23,10 @@ export class HeaderComponent {
   ngOnInit(){
     this.auth.getBasicUserData()
     .then((userData) => {
-      this.user = userData
-      this.userLogged = true
+      if(userData){
+        this.user = userData
+        this.userLogged = true
+      }
     }).catch(() => this.userLogged = false)
 
     this.router.events.subscribe(event => {

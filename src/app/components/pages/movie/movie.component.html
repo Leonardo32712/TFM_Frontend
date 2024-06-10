@@ -1,6 +1,6 @@
 <div class="movie-detail text-white">
     <h1>{{ movie.title }} ({{ movie.release_date | date: 'yyyy' }})</h1>
-    <img [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + movie.poster_path" alt="{{ movie.title }}">
+    <img [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + movie.poster_path" alt="{{ movie.title }}" width="200px">
     <p>{{ movie.overview }}</p>
   
     <h2>Details</h2>
@@ -15,7 +15,7 @@
     <h2>Reviews</h2>
     <div class="reviews">
         <div *ngFor="let reviewId of getReviewIds()" class="review">
-          <img *ngIf="reviews[reviewId].photoURL" [src]="reviews[reviewId].photoURL" alt="{{ reviews[reviewId].username }}">
+          <img *ngIf="reviews[reviewId].photoURL" [src]="reviews[reviewId].photoURL" alt="{{ reviews[reviewId].username }}" width="50px">
           <p><strong>{{ reviews[reviewId].username }}</strong> rated it {{ reviews[reviewId].score }}/5</p>
           <p>{{ reviews[reviewId].review }}</p>
         </div>

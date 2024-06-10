@@ -11,7 +11,7 @@ export const logInWithEmailAndPasswordController = ((auth: Auth, email: string, 
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
                 userCredentials.user.getIdToken().then((idtoken) => {
-                    localStorage.setItem('idtoken', idtoken)
+                    localStorage.setItem('idtoken', idtoken) ///////////////////////////
                 })
                 resolve('Sesión iniciada correctamente.')
             }).catch((error: any) => {
@@ -65,18 +65,18 @@ export const getUserProfileController = ((auth: Auth): Promise<userProfile> => {
     })
 })
 
-export const getBasicUserDataController = (auth: Auth): Promise<basicUser> => {
-    return new Promise<basicUser>((resolve, reject) => {
+export const getBasicUserDataController = (auth: Auth): Promise<basicUser|undefined> => {
+    return new Promise<basicUser|undefined>((resolve, _reject) => {
         user(auth).subscribe((loggedUser) => {
             if (loggedUser) {
-                const displayName = loggedUser.displayName;
-                const photoURL = loggedUser.photoURL;
-                resolve({
-                    displayName: displayName,
-                    photoURL: photoURL
-                });
+                const user: basicUser = {
+                    uid: loggedUser.uid,
+                    displayName: loggedUser.displayName,
+                    photoURL: loggedUser.photoURL
+                }
+                resolve(user);
             } else {
-                reject('User not logged in')
+                resolve(undefined)
             }
         })
     })
