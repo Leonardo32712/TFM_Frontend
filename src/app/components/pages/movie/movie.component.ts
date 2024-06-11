@@ -112,6 +112,14 @@ export class MovieComponent {
           }
         }).then((reviewResult) => {
           if (reviewResult.isConfirmed) {
+            Swal.fire({
+              title: 'Publicando reseña...',
+              text: 'Por favor espere.',
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              }
+            });
             const reviewText = reviewResult.value;
             this.postReview(score, reviewText);
           }
@@ -156,7 +164,27 @@ export class MovieComponent {
     });
   }
 
-  // deleteReview(reviewId: string) {
-  //   this.reviewsService
-  // }
+  deleteReview(reviewId: string) {
+    this.reviewsService.deleteReview(reviewId, this.movie.id).subscribe({
+      next: (_response) => {
+        Swal.fire({
+          title: 'Reseña eliminada',
+          text: 'Tu reseña ha sido eliminada con éxito.',
+          icon: 'success',
+          showCloseButton: true
+        }).then(() => {
+          delete this.reviews[reviewId];
+        });
+      }, 
+      error: (error) => {
+        console.log(error)
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un problema al eliminar tu reseña. Por favor, intenta de nuevo.',
+          icon: 'error',
+          showCloseButton: true
+        });
+      }
+    })
+  }
 }

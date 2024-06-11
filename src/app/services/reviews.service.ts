@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { getReviewsController, postReviewController } from '../controllers/reviews.controller';
+import { deleteReviewController, getReviewsController, postReviewController } from '../controllers/reviews.controller';
 import { ReviewWithMovieID } from '../models/review';
 import { Auth } from '@angular/fire/auth';
 
@@ -17,5 +17,9 @@ export class ReviewsService {
 
   public postReview(review: ReviewWithMovieID) {
     return postReviewController(this.http, this.auth, review)
+  }
+
+  public deleteReview(reviewId: string, movieId: number){
+    return deleteReviewController(this.auth, this.http, reviewId, movieId)
   }
 }

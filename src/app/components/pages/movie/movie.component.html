@@ -46,7 +46,7 @@
             <div class="col-3">
               <img *ngIf="reviews[reviewId].photoURL" [src]="reviews[reviewId].photoURL"
             alt="{{ reviews[reviewId].username }}" width="45px" class="rounded-circle">
-            <button *ngIf="reviews[reviewId].uid == this.user.uid" class="mt-5 btn btn-danger"> Borrar </button>
+            <button *ngIf="reviews[reviewId].uid == this.user.uid" class="mt-5 btn btn-danger" (click)="deleteReview(reviewId)"> Borrar </button>
             </div>
             <div class="col-9 m-0">
               <p><strong>{{ reviews[reviewId].username }} {{ reviews[reviewId].score }}/5</strong> <br>
