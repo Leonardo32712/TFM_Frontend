@@ -92,7 +92,7 @@ export const deleteAccountController = (http: HttpClient, auth: Auth): Promise<s
             auth.currentUser.getIdToken()
             .then((idToken) => {
                 const headers = new HttpHeaders({
-                    'Authorization': idToken
+                    'Authorization': 'Bearer ' + idToken
                 });
     
                 http.delete<string>(BACKEND_URL + '/users', {

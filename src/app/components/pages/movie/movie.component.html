@@ -1,24 +1,60 @@
-<div class="movie-detail text-white">
-    <h1>{{ movie.title }} ({{ movie.release_date | date: 'yyyy' }})</h1>
-    <img [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + movie.poster_path" alt="{{ movie.title }}" width="200px">
-    <p>{{ movie.overview }}</p>
-  
-    <h2>Details</h2>
-    <ul>
-      <li><strong>Runtime:</strong> {{ movie.runtime }} minutes</li>
-      <li><strong>Budget:</strong> {{ movie.budget | currency }}</li>
-      <li><strong>Revenue:</strong> {{ movie.revenue | currency }}</li>
-      <li><strong>Status:</strong> {{ movie.status }}</li>
-      <li><strong>Genres:</strong> {{ movie.genres | json}}</li>
-    </ul>
-  
-    <h2>Reviews</h2>
-    <div class="reviews">
-        <div *ngFor="let reviewId of getReviewIds()" class="review">
-          <img *ngIf="reviews[reviewId].photoURL" [src]="reviews[reviewId].photoURL" alt="{{ reviews[reviewId].username }}" width="50px">
-          <p><strong>{{ reviews[reviewId].username }}</strong> rated it {{ reviews[reviewId].score }}/5</p>
-          <p>{{ reviews[reviewId].review }}</p>
+<div class="p-5 text-white">
+  <section class="ftco-section container bg-dark rounded">
+    <div class="p-5">
+      <div class="row mb-4">
+        <h1 class="mb-4">{{ movie.title }}</h1>
+        <div class="col-3">
+          <img [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + movie.poster_path" alt="{{ movie.title }}"
+          width="200px" class="border border-5 border-black">
         </div>
+        <div class="col-9">
+          <h3>Sinopsis</h3>
+          <p>{{ movie.overview }}</p>
+        </div>
+      </div>
+      <div class="row justify-content-center mb-4">
+        <div class="col-6">
+          <h2>Detalles</h2>
+          <ul class="">
+            <li><strong>Fecha de lanzamiento:</strong> {{ movie.release_date | date: 'dd-MM-yyyy' }}</li>
+            <li><strong>Duración:</strong> {{ movie.runtime }} minutos</li>
+            <li><strong>Presupuesto:</strong> {{ movie.budget | currency }}</li>
+            <li><strong>Recaudación:</strong> {{ movie.revenue | currency }}</li>
+            <li><strong>Estado:</strong> {{ movie.status }}</li>
+          </ul>
+        </div>
+        <div class="col-6">
+          <div class="row">
+            <h2>Géneros</h2>
+            <div class="rounded bg-secondary-subtle p-2 m-1 col-3 text-dark text-center fw-semibold" *ngFor="let genre of movie.genres">
+                {{genre.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-between">
+        <div class="col-2">
+          <h2 class="mb-3 ">Reseñas</h2>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-secondary col fs-5" (click)="openReviewEditor()">Publicar</button>
+        </div>
+      </div>
+      <div class="row justify-content-evenly">
+        <div *ngFor="let reviewId of getReviewIds()" class="rounded bg-secondary-subtle p-3 m-1 col-3 text-dark">
+          <div class="row">
+            <div class="col-3">
+              <img *ngIf="reviews[reviewId].photoURL" [src]="reviews[reviewId].photoURL"
+            alt="{{ reviews[reviewId].username }}" width="45px" class="rounded-circle">
+            <button *ngIf="reviews[reviewId].uid == this.user.uid" class="mt-5 btn btn-danger"> Borrar </button>
+            </div>
+            <div class="col-9 m-0">
+              <p><strong>{{ reviews[reviewId].username }} {{ reviews[reviewId].score }}/5</strong> <br>
+                {{ reviews[reviewId].review }}</p>
+                </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  
+  </section>
+</div>
