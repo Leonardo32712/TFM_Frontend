@@ -19,6 +19,7 @@ import { AuthService } from './services/auth.service';
 
 import { environment } from '../environments/environment';
 import { MovieComponent } from './components/pages/movie/movie.component';
+import { ActorComponent } from './components/pages/actor/actor.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MovieComponent } from './components/pages/movie/movie.component';
     SearchComponent,
     LoginComponent,
     SignupComponent,
-    MovieComponent
+    MovieComponent,
+    ActorComponent
   ],
   imports: [
     HttpClientModule,

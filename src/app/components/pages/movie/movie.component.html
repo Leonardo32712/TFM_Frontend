@@ -1,11 +1,11 @@
 <div class="p-5 text-white">
   <section class="ftco-section container bg-dark rounded">
     <div class="p-5">
-      <div class="row mb-4">
+      <div class="row mb-5">
         <h1 class="mb-4">{{ movie.title }}</h1>
         <div class="col-3">
-          <img [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + movie.poster_path" alt="{{ movie.title }}"
-          width="200px" class="border border-5 border-black">
+          <img [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + movie.poster_path"
+            alt="{{ movie.title }}" width="230px" class="border border-black border-5">
         </div>
         <div class="col-9">
           <h4>Sinopsis</h4>
@@ -26,9 +26,26 @@
         <div class="col-6">
           <div class="row">
             <h2>Géneros</h2>
-            <div class="rounded bg-secondary-subtle p-2 m-1 col-3 text-dark text-center fw-semibold" *ngFor="let genre of movie.genres">
+            <div class="col-4" *ngFor="let genre of movie.genres">
+              <div class="rounded bg-light-subtle m-1 p-2 text-dark text-center fw-semibold">
                 {{genre.name}}
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <h2>Actores</h2>
+        <div class="row m-3 flex-nowrap overflow-auto pb-3">
+          <div class="bg-dark bg-gradient pt-4 m-1 col-3 text-white text-center fw-semibold" 
+          *ngFor="let actor of casting">
+            <a [href]="'/actor?id=' + actor.id" class="link-light link-underline link-underline-opacity-0">
+              <img *ngIf="actor.profile_path" [src]="actor.profile_path" [alt]="actor.name + ' poster'" width="140px" class="border border-2 border-black">
+              <img *ngIf="!actor.profile_path" src="/assets/defaultImage.png" alt="default poster" width="140px" class="border border-2 border-black">
+              <p class="m-0 mt-3"><strong>Nombre:</strong> {{actor.name}} </p>
+              <p class="m-0"><strong>Ocupación:</strong> {{actor.known_for_department}} </p>
+              <p class="m-0"><strong>Personaje:</strong> {{actor.character}} </p>
+            </a>
           </div>
         </div>
       </div>
@@ -36,31 +53,40 @@
         <div class="col-2">
           <h2 class="mb-3 ">Reseñas</h2>
         </div>
-        <div class="col-2">
-          <button class="btn btn-secondary col fs-5" (click)="openReviewEditor()">Publicar</button>
+        <div class="col-3 text-end">
+          <button class="btn btn-danger fs-5 fw-semibold" (click)="openReviewEditor()">Publicar Reseña</button>
         </div>
       </div>
-      <div class="row p-3 m-5 mt-4 justify-content-around">
-        <div class="rounded bg-secondary-subtle p-4 text-dark m-1 col-5 text-center">
-          <h4>Puntuación audiencia: {{calculateAverageRating()}}</h4>
+      <div class="row p-3 m-3 justify-content-around text-center text-light">
+        <div class="col-5">
+          <div class="rounded bg-dark bg-gradient p-4 m-1">
+            <h4>Puntuación audiencia: {{calculateAverageRating() == 0 ? 'Desconocida': calculateAverageRating()}}</h4>
+          </div>
         </div>
-
-        <div class="rounded bg-secondary-subtle p-4 text-dark m-1 col-5 text-center">
-          <h4>Puntuación críticos: {{calculateAverageRating()}}</h4>
+        <div class="col-5">
+          <div class="rounded bg-dark bg-gradient p-4 m-1">
+            <h4>Puntuación críticos: {{calculateAverageRating() == 0 ? 'Desconocida': calculateAverageRating()}}</h4>
+          </div>
         </div>
       </div>
       <div class="row justify-content-evenly">
-        <div *ngFor="let reviewId of getReviewIds()" class="rounded bg-secondary-subtle p-3 m-1 col-3 text-dark">
-          <div class="row">
+        <div *ngFor="let reviewId of getReviewIds()" class="col-4 text-light">
+          <div class="row rounded bg-dark bg-gradient p-3 m-2">
             <div class="col-3">
               <img *ngIf="reviews[reviewId].photoURL" [src]="reviews[reviewId].photoURL"
-            alt="{{ reviews[reviewId].username }}" width="45px" class="rounded-circle">
-            <button *ngIf="reviews[reviewId].uid == this.user.uid" class="mt-5 btn btn-danger" (click)="deleteReview(reviewId)"> Borrar </button>
+                alt="{{ reviews[reviewId].username }}" width="45px" class="rounded-circle">
             </div>
-            <div class="col-9 m-0">
-              <p><strong>{{ reviews[reviewId].username }} {{ reviews[reviewId].score }}/5</strong> <br>
+            <div class="col-9">
+              <p><strong>{{ reviews[reviewId].username }} <span class="badge text-bg-secondary">{{
+                    reviews[reviewId].score }}/5</span></strong> <br>
                 {{ reviews[reviewId].review }}</p>
-                </div>
+            </div>
+            <div class="row justify-content-end">
+              <div class="col-3">
+                <button *ngIf="reviews[reviewId].uid == this.user.uid" class="btn btn-danger"
+                  (click)="deleteReview(reviewId)"> Borrar </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

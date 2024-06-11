@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { BasicActor } from 'src/app/models/basicActor';
 import { basicUser } from 'src/app/models/basicUser';
 import { Movie } from 'src/app/models/movie';
 import { Review, ReviewWithMovieID } from 'src/app/models/review';
@@ -15,6 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class MovieComponent {
   public movie: Movie = {} as Movie
+  public casting: BasicActor[] = []
   public reviews: Record<string, Review>= {} as Record<string, Review>
   public user: basicUser = {} as basicUser
 
@@ -35,6 +37,16 @@ export class MovieComponent {
         next: (response) => {
           this.movie = response
         }, error: (error) => {
+          console.log(error)
+        }
+      })
+
+      this.movieService.getCasting(movieId).subscribe({
+        next: (response) => {
+          console.log(response)
+          this.casting = response;
+        },
+        error: (error) => {
           console.log(error)
         }
       })
@@ -91,53 +103,69 @@ export class MovieComponent {
   }
 
   openReviewEditor() {
-    Swal.fire({
-      title: 'Introduce la puntuación (1-5):',
-      input: 'number',
-      inputAttributes: {
-        min: '1',
-        max: '5',
-        step: '1'
-      },
-      showCancelButton: true,
-      inputValidator: (value) => {
-        const score = Number(value);
-        if (isNaN(score) || score < 1 || score > 5) {
-          return 'La puntuación debe estar entre 1 y 5.';
-        } else {
-          return undefined;
+    if(!this.user.uid) {
+      Swal.fire({
+        title: '¿Quién eres?',
+        text: 'Para publicar una reseña debes iniciar sesión primero.',
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonText: 'Iniciar sesión',
+        cancelButtonText: 'Cancelar',
+        footer: '¿No tienes una cuenta? Prueba a <a href="/register">Registrarse</a>'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/login'])
+        } 
+      });
+    } else {
+      Swal.fire({
+        title: 'Introduce la puntuación (1-5):',
+        input: 'number',
+        inputAttributes: {
+          min: '1',
+          max: '5',
+          step: '1'
+        },
+        showCancelButton: true,
+        inputValidator: (value) => {
+          const score = Number(value);
+          if (isNaN(score) || score < 1 || score > 5) {
+            return 'La puntuación debe estar entre 1 y 5.';
+          } else {
+            return undefined;
+          }
         }
-      }
-    }).then((scoreResult) => {
-      if (scoreResult.isConfirmed) {
-        const score = Number(scoreResult.value);
-        Swal.fire({
-          title: 'Introduce tu reseña:',
-          input: 'textarea',
-          showCancelButton: true,
-          inputValidator: (value) => {
-            if (!value) {
-              return 'La reseña no puede estar vacía.';
-            } else {
-              return undefined;
-            }
-          }
-        }).then((reviewResult) => {
-          if (reviewResult.isConfirmed) {
-            Swal.fire({
-              title: 'Publicando reseña...',
-              text: 'Por favor espere.',
-              allowOutsideClick: false,
-              didOpen: () => {
-                Swal.showLoading();
+      }).then((scoreResult) => {
+        if (scoreResult.isConfirmed) {
+          const score = Number(scoreResult.value);
+          Swal.fire({
+            title: 'Introduce tu reseña:',
+            input: 'textarea',
+            showCancelButton: true,
+            inputValidator: (value) => {
+              if (!value) {
+                return 'La reseña no puede estar vacía.';
+              } else {
+                return undefined;
               }
-            });
-            const reviewText = reviewResult.value;
-            this.postReview(score, reviewText);
-          }
-        });
-      }
-    });
+            }
+          }).then((reviewResult) => {
+            if (reviewResult.isConfirmed) {
+              Swal.fire({
+                title: 'Publicando reseña...',
+                text: 'Por favor espere.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                  Swal.showLoading();
+                }
+              });
+              const reviewText = reviewResult.value;
+              this.postReview(score, reviewText);
+            }
+          });
+        }
+      });
+    }
   }
 
   postReview(score: number, reviewText: string) {
