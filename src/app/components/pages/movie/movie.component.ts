@@ -138,8 +138,10 @@ export class MovieComponent {
           icon: 'success',
           showCloseButton: true
         }).then(() => {
-          this.reviews[response.reviewId] = newReview as Review; 
-          // this.sortReviews(this.reviews, this.user.uid);
+          this.reviews = {
+            [response.reviewId]: newReview as Review, 
+            ...this.reviews
+          };
         });
       }, 
       error: (error) => {
