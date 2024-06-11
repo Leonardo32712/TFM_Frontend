@@ -76,7 +76,19 @@ export class MovieComponent {
 
   getReviewIds(): string[] {
     return Object.keys(this.reviews);
-  } 
+  }
+
+  calculateAverageRating(): number {
+    const reviewIds = Object.keys(this.reviews);
+    if (reviewIds.length === 0) {
+      return 0;
+    }
+
+    const totalScore = reviewIds.reduce((acc, curr) => acc + this.reviews[curr].score, 0);
+    const averageRating = totalScore / reviewIds.length;
+    
+    return Math.round(averageRating * 10) / 10;
+  }
 
   openReviewEditor() {
     Swal.fire({

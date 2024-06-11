@@ -27,10 +27,10 @@ export const postReviewController = (http: HttpClient, auth: Auth, review: Revie
             .set('uid', review.uid)
             .set('username', review.username)
             .set('photoURL', review.photoURL)
-            .set('score', review.score.toString())
+            .set('score', review.score)
             .set('review', review.review);
         
-        return http.post<{ message: string, reviewId: string }>(BACKEND_URL + '/reviews', body.toString(), { headers, params });
+        return http.post<{ message: string, reviewId: string }>(BACKEND_URL + '/reviews', body, { headers, params });
       })
     );
 }

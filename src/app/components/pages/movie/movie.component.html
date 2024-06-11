@@ -8,7 +8,7 @@
           width="200px" class="border border-5 border-black">
         </div>
         <div class="col-9">
-          <h3>Sinopsis</h3>
+          <h4>Sinopsis</h4>
           <p>{{ movie.overview }}</p>
         </div>
       </div>
@@ -38,6 +38,15 @@
         </div>
         <div class="col-2">
           <button class="btn btn-secondary col fs-5" (click)="openReviewEditor()">Publicar</button>
+        </div>
+      </div>
+      <div class="row p-3 m-5 mt-4 justify-content-around">
+        <div class="rounded bg-secondary-subtle p-4 text-dark m-1 col-5 text-center">
+          <h4>Puntuación audiencia: {{calculateAverageRating()}}</h4>
+        </div>
+
+        <div class="rounded bg-secondary-subtle p-4 text-dark m-1 col-5 text-center">
+          <h4>Puntuación críticos: {{calculateAverageRating()}}</h4>
         </div>
       </div>
       <div class="row justify-content-evenly">
