@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { signUpUser } from 'src/app/models/signUpUser';
+import { signUpUser } from 'src/app/models/user/signUpUser';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
 

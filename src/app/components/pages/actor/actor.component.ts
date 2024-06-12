@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actor } from 'src/app/models/actor';
-import { MoviePoster } from 'src/app/models/moviePoster';
+import { Actor } from 'src/app/models/actor/actor';
+import { MoviePoster } from 'src/app/models/movie/moviePoster';
 import { MovieService } from 'src/app/services/movie.service';
 
 @Component({

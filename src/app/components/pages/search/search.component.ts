@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MoviePoster } from 'src/app/models/moviePoster';
+import { MoviePoster } from 'src/app/models/movie/moviePoster';
 import { MovieService } from 'src/app/services/movie.service';
 
 @Component({

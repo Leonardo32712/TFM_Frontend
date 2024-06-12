@@ -1,39 +1,128 @@
 import { Injectable } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { basicUser } from '../models/basicUser';
-import { HttpClient} from '@angular/common/http';
-import { userProfile } from '../models/userProfile';
-import { deleteAccountController, getBasicUserDataController, getUserProfileController, logInWithEmailAndPasswordController, logOutController, singUpController } from '../controllers/auth.controller';
-import { signUpUser } from '../models/signUpUser';
+import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
+import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "../controllers/auth.controller.error"
+import { basicUser } from '../models/user/basicUser';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { userProfile } from '../models/user/userProfile';
+import { signUpUser } from '../models/user/signUpUser';
+import { BACKEND_URL } from "src/environments/environment"
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private afAuth: Auth) { }
+  constructor(private http: HttpClient, private auth: Auth) { }
 
   public logInEmailAndPassword(email: string, password: string): Promise<string> {
-    return logInWithEmailAndPasswordController(this.afAuth, email, password)
+    return new Promise<string>((resolve, reject) => {
+      signInWithEmailAndPassword(this.auth, email, password)
+        .then((userCredentials) => {
+          userCredentials.user.getIdToken().then((idtoken) => {
+            localStorage.setItem('idtoken', idtoken) ///////////////////////////
+          })
+          resolve('Sesión iniciada correctamente.')
+        }).catch((error: any) => {
+          reject(logInControllerErrorHandler(error))
+        })
+    })
   }
 
   public signUp(user: signUpUser): Promise<string> {
-    return singUpController(this.http, user)
+    return new Promise<string>((resolve, reject) => {
+      const formData: FormData = new FormData();
+      formData.append('displayName', user.username);
+      formData.append('email', user.email);
+      formData.append('password', user.password);
+      if (user.profilePic) {
+        formData.append('photo', user.profilePic, user.profilePic.name);
+      }
+
+      this.http.post(BACKEND_URL + '/users/signup', formData, {
+        observe: 'response'
+      })
+        .subscribe({
+          next: (response) => {
+            if (response.status == 201) {
+              resolve('Usuario registrado correctamente')
+            } else {
+              reject('Error inesperado en el registro de usuario')
+            }
+          }, error: (error: any) => {
+            reject(signUpControllerErrorHandler(error))
+          }
+        })
+    });
   }
 
   public getUserProfile(): Promise<userProfile> {
-    return getUserProfileController(this.afAuth)
+    return new Promise<userProfile>((resolve, reject) => {
+      user(this.auth).subscribe((loggedUser) => {
+        if (loggedUser) {
+          const user: userProfile = {
+            email: loggedUser.email,
+            emailVerified: loggedUser.emailVerified,
+            displayName: loggedUser.displayName,
+            photoURL: loggedUser.photoURL
+          }
+          resolve(user);
+        } else {
+          reject('User not logged in')
+        }
+      })
+    })
   }
 
-  public getBasicUserData(): Promise<basicUser|undefined> {
-    return getBasicUserDataController(this.afAuth)
+  public getBasicUserData(): Promise<basicUser | undefined> {
+    return new Promise<basicUser | undefined>((resolve, _reject) => {
+      user(this.auth).subscribe((loggedUser) => {
+        if (loggedUser) {
+          const user: basicUser = {
+            uid: loggedUser.uid,
+            displayName: loggedUser.displayName,
+            photoURL: loggedUser.photoURL
+          }
+          resolve(user);
+        } else {
+          resolve(undefined)
+        }
+      })
+    })
   }
 
   public logOut() {
-    return logOutController(this.afAuth)
+    this.auth.signOut();
   }
 
   public deleteAccount() {
-    return deleteAccountController(this.http, this.afAuth)
+    return new Promise<string>((resolve, reject) => {
+      if (this.auth.currentUser != null) {
+        this.auth.currentUser.getIdToken()
+          .then((idToken) => {
+            const headers = new HttpHeaders({
+              'Authorization': 'Bearer ' + idToken
+            });
+
+            this.http.delete<string>(BACKEND_URL + '/users', {
+              headers: headers,
+              observe: 'response'
+            }).subscribe({
+              next: (response) => {
+                if (response.status == 200) {
+                  resolve('Su cuenta ha sido eliminada exitosamente.')
+                } else {
+                  reject('Error inesperado en la eliminación de su cuenta')
+                }
+              }, error: (error) => {
+                reject(deleteAccountErrorHandler(error))
+              }
+            })
+          }).catch((_error) => {
+            reject('Usuario no autenticado')
+          })
+      } else {
+        reject('Usuario no autenticado')
+      }
+    })
   }
 }

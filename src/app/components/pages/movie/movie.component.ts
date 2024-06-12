@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { BasicActor } from 'src/app/models/basicActor';
-import { basicUser } from 'src/app/models/basicUser';
-import { Movie } from 'src/app/models/movie';
-import { Review, ReviewWithMovieID } from 'src/app/models/review';
+import { BasicActor } from 'src/app/models/actor/basicActor';
+import { basicUser } from 'src/app/models/user/basicUser';
+import { Movie } from 'src/app/models/movie/movie';
+import { Review, ReviewWithMovieID } from 'src/app/models/review/review';
 import { AuthService } from 'src/app/services/auth.service';
 import { MovieService } from 'src/app/services/movie.service';
 import { ReviewsService } from 'src/app/services/reviews.service';
@@ -175,7 +175,7 @@ export class MovieComponent {
       username: this.user.displayName || '',
       photoURL: this.user.photoURL || '',
       score,
-      review: reviewText
+      text: reviewText
     };
 
     this.reviewsService.postReview(newReview).subscribe({
@@ -210,8 +210,7 @@ export class MovieComponent {
         text: 'No podrás revertir esta acción.',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#d33',
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar'
     }).then((result) => {

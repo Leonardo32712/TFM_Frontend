@@ -1,10 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { getCarouselController, getHomeListController, getMovieController, searchMovieController } from '../controllers/movie.controller';
 import { BACKEND_URL } from 'src/environments/environment';
-import { BasicActor } from '../models/basicActor';
-import { Actor } from '../models/actor';
-import { MoviePoster } from '../models/moviePoster';
+import { BasicActor } from '../models/actor/basicActor';
+import { Actor } from '../models/actor/actor';
+import { MoviePoster } from '../models/movie/moviePoster';
+import { CarouselMovie } from "../models/movie/carouselMovie"
+import { Movie } from "../models/movie/movie"
 
 @Injectable({
   providedIn: 'root'
@@ -14,19 +15,21 @@ export class MovieService {
   constructor(private http: HttpClient){}
 
   public getCarousel() {
-    return getCarouselController(this.http)
+    return this.http.get<CarouselMovie[]>(BACKEND_URL + '/movies/carousel')
   }
 
   public getHomeList() {
-    return getHomeListController(this.http)
+    return this.http.get<MoviePoster[]>(BACKEND_URL + '/movies/home-list')
   }
 
   public searchMovie(query: string, page: number) {
-    return searchMovieController(this.http, query, page)
+    const params = new HttpParams().set('q', query).set('p', page)
+    return this.http.get<MoviePoster[]>(BACKEND_URL + '/movies/search', { params })
   }
 
   public getMovie(movieId: string){
-    return getMovieController(this.http, movieId)
+    const params = new HttpParams().set('movie_id', movieId)
+    return this.http.get<Movie>(BACKEND_URL + '/movies', { params })
   }
 
   public getCasting(movieId: string) {
