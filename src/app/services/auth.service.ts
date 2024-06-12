@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { userProfile } from '../models/user/userProfile';
 import { signUpUser } from '../models/user/signUpUser';
 import { BACKEND_URL } from "src/environments/environment"
+import { userUpdate } from '../models/user/userUpdate';
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +71,49 @@ export class AuthService {
           reject('User not logged in')
         }
       })
+    })
+  }
+
+  public updateUserData(newUserData: userUpdate): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      if (this.auth.currentUser != null) {
+        this.auth.currentUser.getIdToken()
+        .then((idToken) => {
+          const formData: FormData = new FormData();
+          const fields: (keyof userUpdate)[] = ['displayName', 'email', 'photoURL'];
+
+          fields.forEach(field => {
+            const value = newUserData[field];
+            if (value) {
+              if (field === 'photoURL' && value instanceof File) {
+                formData.append('photo', value, value.name);
+              } else if (typeof value === 'string') {
+                formData.append(field, value);
+              }
+            }
+          });
+          
+          const headers = new HttpHeaders({
+            'Authorization': 'Bearer ' + idToken
+          });
+          this.http.put(BACKEND_URL + '/users/updateData', formData, { headers , observe: 'response' })
+          .subscribe({
+            next: (response) => {
+              if (response.status == 201) {
+                resolve('Usuario actualizado correctamente')
+              } else {
+                reject('Error inesperado en la actualización de usuario')
+              }
+            }, error: (error) => {
+              reject(error)
+            }
+          })
+        }).catch((_error) => {
+          reject('Usuario no autenticado')
+        })
+      } else {
+        reject('Usuario no autenticado')
+      }   
     })
   }
 

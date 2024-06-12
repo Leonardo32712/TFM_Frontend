@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { userProfile } from 'src/app/models/user/userProfile';
+import { userUpdate } from 'src/app/models/user/userUpdate';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
 
@@ -11,7 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class ProfileComponent {
   userProfile: userProfile = {} as userProfile
-  editedUserProfile: userProfile = {} as userProfile
+  editedUserProfile: userUpdate = {} as userUpdate
   uploadedFile: File | null = null;
   readMode: boolean = true;
 
@@ -21,14 +22,16 @@ export class ProfileComponent {
     this.auth.getUserProfile()
     .then((user) => {
       this.userProfile = user;
-      this.editedUserProfile = user;
+      this.editedUserProfile = {...user,
+        photoURL: null
+      };
     }).catch(() => {
       this.router.navigate(['/home'])
     })
   }
   
   changeMode(){
-    this.editedUserProfile = {...this.userProfile}
+    this.editedUserProfile = {...this.userProfile, photoURL: null}
     this.uploadedFile = null;
     this.readMode = !this.readMode
   }
@@ -40,8 +43,46 @@ export class ProfileComponent {
     }
   }
 
-  updateProfile(){
-    
+  updateProfile() {
+    Swal.fire({
+      title: 'Confirmar actualización',
+      html: `
+        <p><strong>Email anterior:</strong> ${this.userProfile.email}</p>
+        <p><strong>Email nuevo:</strong> ${this.editedUserProfile.email}</p>
+        <p><strong>Nombre anterior:</strong> ${this.userProfile.displayName}</p>
+        <p><strong>Nombre nuevo:</strong> ${this.editedUserProfile.displayName}</p>
+        <p><strong>Foto anterior:</strong> ${this.userProfile.photoURL}</p>
+        <p><strong>Foto nueva:</strong> ${this.uploadedFile ? this.uploadedFile.name : 'No cambiada'}</p>
+      `,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, actualizar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (this.uploadedFile) {
+          this.editedUserProfile.photoURL = this.uploadedFile;
+        }
+        this.auth.updateUserData(this.editedUserProfile).then((response) => {
+          Swal.fire({
+            title: 'Perfil actualizado',
+            text: response,
+            icon: 'success',
+            showCloseButton: true
+          }).then(() => {
+            this.readMode = true;
+            this.ngOnInit()
+          });
+        }).catch((error: string) => {
+          Swal.fire({
+            title: 'Error',
+            text: error,
+            icon: 'error',
+            showCloseButton: true
+          });
+        });
+      }
+    });
   }
 
   requestVerification(){
