@@ -17,22 +17,23 @@ import Swal from 'sweetalert2';
 export class MovieComponent {
   public movie: Movie = {} as Movie
   public casting: BasicActor[] = []
-  public reviews: Record<string, Review>= {} as Record<string, Review>
+  public criticsReviews: Record<string, Review> = {} as Record<string, Review>
+  public spectatorReviews: Record<string, Review> = {} as Record<string, Review>
   public user: basicUser = {} as basicUser
 
   constructor(
-    private router: Router, 
-    private movieService: MovieService, 
+    private router: Router,
+    private movieService: MovieService,
     private reviewsService: ReviewsService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const currentUrl = this.router.url;
     const urlParams = new URLSearchParams(currentUrl.split('?')[1]);
     const movieId = urlParams.get('id');
 
-    if(movieId){
+    if (movieId) {
       this.movieService.getMovie(movieId).subscribe({
         next: (response) => {
           this.movie = response
@@ -43,7 +44,6 @@ export class MovieComponent {
 
       this.movieService.getCasting(movieId).subscribe({
         next: (response) => {
-          console.log(response)
           this.casting = response;
         },
         error: (error) => {
@@ -54,14 +54,16 @@ export class MovieComponent {
       this.reviewsService.getReviews(movieId).subscribe({
         next: (response) => {
           this.authService.getBasicUserData()
-          .then((user) => {
-            if(user){
-              this.user = user
-              this.reviews = this.sortReviews(response, user.uid)
-            } else {
-              this.reviews = response;
-            }
-          })
+            .then((user) => {
+              if (user) {
+                this.user = user
+                this.criticsReviews = this.sortReviews(response.critics, user.uid)
+                this.spectatorReviews = this.sortReviews(response.spectators, user.uid)
+              } else {
+                this.criticsReviews = response.critics;
+                this.spectatorReviews = response.spectators;
+              }
+            })
         }, error: (error) => {
           console.log(error)
         }
@@ -86,24 +88,28 @@ export class MovieComponent {
     return Object.fromEntries(sortedReviews);
   }
 
-  getReviewIds(): string[] {
-    return Object.keys(this.reviews);
+  getSpectatorReviewIds(): string[] {
+    return Object.keys(this.spectatorReviews);
   }
 
-  calculateAverageRating(): number {
-    const reviewIds = Object.keys(this.reviews);
+  getCriticReviewIds(): string[] {
+    return Object.keys(this.criticsReviews);
+  }
+
+  calculateAverageRating(reviews: Record<string, Review>): number {
+    const reviewIds = Object.keys(reviews);
     if (reviewIds.length === 0) {
       return 0;
     }
 
-    const totalScore = reviewIds.reduce((acc, curr) => acc + this.reviews[curr].score, 0);
+    const totalScore = reviewIds.reduce((acc, curr) => acc + reviews[curr].score, 0);
     const averageRating = totalScore / reviewIds.length;
-    
+
     return Math.round(averageRating * 10) / 10;
   }
 
   openReviewEditor() {
-    if(!this.user.uid) {
+    if (!this.user.uid) {
       Swal.fire({
         title: '¿Quién eres?',
         text: 'Para publicar una reseña debes iniciar sesión primero.',
@@ -115,54 +121,79 @@ export class MovieComponent {
       }).then((result) => {
         if (result.isConfirmed) {
           this.router.navigate(['/login'])
-        } 
+        }
       });
     } else {
       Swal.fire({
-        title: 'Introduce la puntuación (1-5):',
-        input: 'number',
-        inputAttributes: {
-          min: '1',
-          max: '5',
-          step: '1'
-        },
-        showCancelButton: true,
-        inputValidator: (value) => {
-          const score = Number(value);
-          if (isNaN(score) || score < 1 || score > 5) {
-            return 'La puntuación debe estar entre 1 y 5.';
-          } else {
-            return undefined;
-          }
-        }
-      }).then((scoreResult) => {
-        if (scoreResult.isConfirmed) {
-          const score = Number(scoreResult.value);
-          Swal.fire({
-            title: 'Introduce tu reseña:',
-            input: 'textarea',
-            showCancelButton: true,
-            inputValidator: (value) => {
-              if (!value) {
-                return 'La reseña no puede estar vacía.';
-              } else {
-                return undefined;
-              }
+        title: 'Por favor, introduce tu puntuación y reseña:',
+        html: `
+        <head>
+          <style>
+            .rating {
+              display: flex;
+              justify-content: center;
+              direction: rtl;
             }
-          }).then((reviewResult) => {
-            if (reviewResult.isConfirmed) {
-              Swal.fire({
-                title: 'Publicando reseña...',
-                text: 'Por favor espere.',
-                allowOutsideClick: false,
-                didOpen: () => {
-                  Swal.showLoading();
-                }
-              });
-              const reviewText = reviewResult.value;
-              this.postReview(score, reviewText);
+            .rating input {
+              display: none;
+            }
+            .rating label {
+              font-size: 2em;
+              color: gray;
+              cursor: pointer;
+            }
+            .rating label:hover,
+            .rating label:hover ~ label,
+            .rating input:checked ~ label {
+              color: gold;
+            }
+          </style>
+        </head>
+          <div>
+            <label>Puntuación:</label><br>
+            <div class="d-flex justify-content-center">
+              <div class="text-center">
+                <div class="rating">
+                  <input type="radio" name="score" value="5" id="star5" /><label for="star5">☆</label>
+                  <input type="radio" name="score" value="4" id="star4" /><label for="star4">☆</label>
+                  <input type="radio" name="score" value="3" id="star3" /><label for="star3">☆</label>
+                  <input type="radio" name="score" value="2" id="star2" /><label for="star2">☆</label>
+                  <input type="radio" name="score" value="1" id="star1" /><label for="star1">☆</label>
+                </div>
+              </div>
+            </div>
+            <label for="reviewTextArea">Reseña:</label><br>
+            <textarea id="reviewTextArea" rows="4" cols="50"></textarea>
+          </div>
+        `,
+        showCancelButton: true,
+        preConfirm: () => {
+          const scoreElement = document.querySelector('input[name="score"]:checked') as HTMLInputElement;;
+          const reviewElement = document.getElementById('reviewTextArea') as HTMLTextAreaElement;;
+          const score = scoreElement ? parseInt(scoreElement.value) : null;
+          const text = reviewElement ? reviewElement.value : null;
+          if (!score) {
+            Swal.showValidationMessage('La puntuación debe estar entre 1 y 5.');
+            return false;
+          }
+          if (!text) {
+            Swal.showValidationMessage('La reseña no puede estar vacía.');
+            return false;
+          }
+          return { score, text };
+        }
+      }).then((reviewResult) => {
+        if (reviewResult.isConfirmed) {
+          const { score, text } = reviewResult.value;
+          Swal.fire({
+            title: 'Publicando reseña...',
+            text: 'Por favor espere.',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
             }
           });
+          this.postReview(score, text);
         }
       });
     }
@@ -186,12 +217,19 @@ export class MovieComponent {
           icon: 'success',
           showCloseButton: true
         }).then(() => {
-          this.reviews = {
-            [response.reviewId]: newReview as Review, 
-            ...this.reviews
-          };
+          if (this.user.emailVerified) {
+            this.criticsReviews = {
+              [response.reviewId]: newReview as Review,
+              ...this.criticsReviews
+            };
+          } else {
+            this.spectatorReviews = {
+              [response.reviewId]: newReview as Review,
+              ...this.spectatorReviews
+            };
+          }
         });
-      }, 
+      },
       error: (error) => {
         console.log(error);
         Swal.fire({
@@ -206,37 +244,41 @@ export class MovieComponent {
 
   deleteReview(reviewId: string) {
     Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'No podrás revertir esta acción.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
+      title: '¿Estás seguro?',
+      text: 'No podrás revertir esta acción.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
-        if (result.isConfirmed) {
-            this.reviewsService.deleteReview(reviewId, this.movie.id).subscribe({
-                next: (_response) => {
-                    Swal.fire({
-                        title: 'Reseña eliminada',
-                        text: 'Tu reseña ha sido eliminada con éxito.',
-                        icon: 'success',
-                        showCloseButton: true
-                    }).then(() => {
-                        delete this.reviews[reviewId];
-                    });
-                },
-                error: (error) => {
-                    console.log(error);
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Hubo un problema al eliminar tu reseña. Por favor, intenta de nuevo.',
-                        icon: 'error',
-                        showCloseButton: true
-                    });
-                }
+      if (result.isConfirmed) {
+        this.reviewsService.deleteReview(reviewId, this.movie.id).subscribe({
+          next: (_response) => {
+            Swal.fire({
+              title: 'Reseña eliminada',
+              text: 'Tu reseña ha sido eliminada con éxito.',
+              icon: 'success',
+              showCloseButton: true
+            }).then(() => {
+              if (this.user.emailVerified) {
+                delete this.criticsReviews[reviewId];
+              } else {
+                delete this.spectatorReviews[reviewId];
+              }
             });
-        }
+          },
+          error: (error) => {
+            console.log(error);
+            Swal.fire({
+              title: 'Error',
+              text: 'Hubo un problema al eliminar tu reseña. Por favor, intenta de nuevo.',
+              icon: 'error',
+              showCloseButton: true
+            });
+          }
+        });
+      }
     });
   }
 }

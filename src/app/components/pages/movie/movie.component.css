@@ -11,3 +11,8 @@
     scrollbar-width: thin; /* Ancho del scrollbar */
     scrollbar-color: rgba(136, 136, 136, 0.8) transparent; /* Color del pulgar con transparencia y pista transparente */
 }
+
+.badge-critic {
+    background-color: #8a0bd2;
+    color: white; /* Asegúrate de que el texto sea legible */
+}

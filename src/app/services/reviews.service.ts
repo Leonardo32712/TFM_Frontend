@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { ReviewWithMovieID } from '../models/review/review';
 import { from, switchMap } from "rxjs";
-import { Review } from "../models/review/review";
 import { BACKEND_URL } from "src/environments/environment";
+import { AllReviews } from '../models/review/allReviews';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class ReviewsService {
 
   public getReviews(movieId: string) {
     const params = new HttpParams().set('movie_id', movieId)
-    return this.http.get<Record<string, Review>>(BACKEND_URL + '/reviews', { params })
+    return this.http.get<AllReviews>(BACKEND_URL + '/reviews', { params })
   }
 
   public postReview(review: ReviewWithMovieID) {

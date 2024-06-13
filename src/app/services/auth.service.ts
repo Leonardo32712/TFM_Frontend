@@ -123,6 +123,7 @@ export class AuthService {
         if (loggedUser) {
           const user: basicUser = {
             uid: loggedUser.uid,
+            emailVerified: loggedUser.emailVerified,
             displayName: loggedUser.displayName,
             photoURL: loggedUser.photoURL
           }

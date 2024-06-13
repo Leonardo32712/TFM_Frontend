@@ -43,46 +43,61 @@ export class ProfileComponent {
     }
   }
 
+  private thereAreChanges(): boolean {
+    return this.userProfile.displayName != this.editedUserProfile.displayName ||
+    this.userProfile.email != this.editedUserProfile.email ||
+    this.uploadedFile != null
+  }
+
   updateProfile() {
-    Swal.fire({
-      title: 'Confirmar actualización',
-      html: `
-        <p><strong>Email anterior:</strong> ${this.userProfile.email}</p>
-        <p><strong>Email nuevo:</strong> ${this.editedUserProfile.email}</p>
-        <p><strong>Nombre anterior:</strong> ${this.userProfile.displayName}</p>
-        <p><strong>Nombre nuevo:</strong> ${this.editedUserProfile.displayName}</p>
-        <p><strong>Foto anterior:</strong> ${this.userProfile.photoURL}</p>
-        <p><strong>Foto nueva:</strong> ${this.uploadedFile ? this.uploadedFile.name : 'No cambiada'}</p>
-      `,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, actualizar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (this.uploadedFile) {
-          this.editedUserProfile.photoURL = this.uploadedFile;
+    if(!this.thereAreChanges()) {
+      Swal.fire({
+        title: 'Nada nuevo',
+        text: 'No ha realizado ningún cambio en su perfil',
+        icon: 'info',
+        showCloseButton: true
+      })
+    } else {
+      Swal.fire({
+        title: 'Confirmar actualización',
+        html: `
+          <p><strong>¡Importante!</strong> Si cambias el correo se cerrará la sesión</p>
+          <p><strong>Email anterior:</strong> ${this.userProfile.email} <br>
+          <strong>Email nuevo:</strong> ${this.editedUserProfile.email}</p>
+          <p><strong>Nombre anterior:</strong> ${this.userProfile.displayName} <br>
+          <strong>Nombre nuevo:</strong> ${this.editedUserProfile.displayName}</p>
+          <p><strong>Foto anterior:</strong> ${this.userProfile.photoURL}<br>
+          <strong>Foto nueva:</strong> ${this.uploadedFile ? this.uploadedFile.name : 'Ningún archivo subido'}</p>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, actualizar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (this.uploadedFile) {
+            this.editedUserProfile.photoURL = this.uploadedFile;
+          }
+          this.auth.updateUserData(this.editedUserProfile).then((response) => {
+            Swal.fire({
+              title: 'Perfil actualizado',
+              text: response,
+              icon: 'success',
+              showCloseButton: true
+            }).then(() => {
+              window.location.reload()
+            });
+          }).catch((error: string) => {
+            Swal.fire({
+              title: 'Error',
+              text: error,
+              icon: 'error',
+              showCloseButton: true
+            });
+          });
         }
-        this.auth.updateUserData(this.editedUserProfile).then((response) => {
-          Swal.fire({
-            title: 'Perfil actualizado',
-            text: response,
-            icon: 'success',
-            showCloseButton: true
-          }).then(() => {
-            this.readMode = true;
-            this.ngOnInit()
-          });
-        }).catch((error: string) => {
-          Swal.fire({
-            title: 'Error',
-            text: error,
-            icon: 'error',
-            showCloseButton: true
-          });
-        });
-      }
-    });
+      });
+    }
   }
 
   requestVerification(){
