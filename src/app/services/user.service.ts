@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
 import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "../controllers/auth.controller.error"
 import { basicUser } from '../models/user/basicUser';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { userProfile } from '../models/user/userProfile';
 import { signUpUser } from '../models/user/signUpUser';
 import { BACKEND_URL } from "src/environments/environment"
 import { userUpdate } from '../models/user/userUpdate';
-import { from, switchMap } from 'rxjs';
+import { Observable, from, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class UserService {
 
   constructor(private http: HttpClient, private auth: Auth) { }
 
@@ -136,11 +136,11 @@ export class AuthService {
     })
   }
 
-  public logOut() {
+  public logOut(): void {
     this.auth.signOut();
   }
 
-  public requestVerification(requestText: string) {
+  public requestVerification(requestText: string): Observable<HttpResponse<{message: string}>> {
     return from(this.auth.currentUser?.getIdToken() ?? Promise.resolve('')).pipe(
       switchMap((resultToken) => {
         if (!resultToken) {
@@ -149,7 +149,7 @@ export class AuthService {
 
         const headers: HttpHeaders = new HttpHeaders({
           'Authorization': 'Bearer ' + resultToken,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json '
         });
 
         const body = {text: requestText}
@@ -159,32 +159,32 @@ export class AuthService {
     );
   }
 
-  public deleteAccount() {
+  public deleteAccount(): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       if (this.auth.currentUser != null) {
         this.auth.currentUser.getIdToken()
-          .then((idToken) => {
-            const headers = new HttpHeaders({
-              'Authorization': 'Bearer ' + idToken
-            });
+        .then((idToken) => {
+          const headers = new HttpHeaders({
+            'Authorization': 'Bearer ' + idToken
+          });
 
-            this.http.delete<string>(BACKEND_URL + '/users', {
-              headers: headers,
-              observe: 'response'
-            }).subscribe({
-              next: (response) => {
-                if (response.status == 200) {
-                  resolve('Su cuenta ha sido eliminada exitosamente.')
-                } else {
-                  reject('Error inesperado en la eliminación de su cuenta')
-                }
-              }, error: (error) => {
-                reject(deleteAccountErrorHandler(error))
+          this.http.delete<string>(BACKEND_URL + '/users', {
+            headers: headers,
+            observe: 'response'
+          }).subscribe({
+            next: (response) => {
+              if (response.status == 200) {
+                resolve('Su cuenta ha sido eliminada exitosamente.')
+              } else {
+                reject('Error inesperado en la eliminación de su cuenta')
               }
-            })
-          }).catch((_error) => {
-            reject('Usuario no autenticado')
+            }, error: (error) => {
+              reject(deleteAccountErrorHandler(error))
+            }
           })
+        }).catch((_error) => {
+          reject('Usuario no autenticado')
+        })
       } else {
         reject('Usuario no autenticado')
       }

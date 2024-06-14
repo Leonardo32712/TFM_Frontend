@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { basicUser } from 'src/app/models/user/basicUser';
-import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -16,12 +16,12 @@ export class HeaderComponent {
   showButtons: boolean = true
 
   constructor(
-    private auth: AuthService,
+    private userService: UserService,
     private router: Router
   ){}
 
   ngOnInit(){
-    this.auth.getBasicUserData()
+    this.userService.getBasicUserData()
     .then((userData) => {
       if(userData){
         this.user = userData

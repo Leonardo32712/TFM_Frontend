@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,10 +13,10 @@ export class LoginComponent {
   email: string = ''
   password: string = ''
 
-  constructor(private auth: AuthService, private router: Router){}
+  constructor(private userService: UserService, private router: Router){}
 
   ngOnInit(){
-    this.auth.getBasicUserData().then((user) => {
+    this.userService.getBasicUserData().then((user) => {
       if(user){
         this.router.navigate(['/home'])
       }
@@ -32,7 +32,7 @@ export class LoginComponent {
         Swal.showLoading();
       }
     });
-    this.auth.logInEmailAndPassword(this.email, this.password)
+    this.userService.logInEmailAndPassword(this.email, this.password)
       .then((message) => {
         Swal.fire({
           title: 'Sesión iniciada',

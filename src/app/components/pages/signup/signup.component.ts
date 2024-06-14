@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { signUpUser } from 'src/app/models/user/signUpUser';
-import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,10 +17,10 @@ export class SignupComponent {
   confirmPassword: string = ''
   profilePic: File | null = null;
 
-  constructor(private auth: AuthService, private router: Router){}
+  constructor(private userService: UserService, private router: Router){}
 
   ngOnInit(){
-    this.auth.getBasicUserData().then((user) => {
+    this.userService.getBasicUserData().then((user) => {
       if(user){
         this.router.navigate(['/home'])
       }
@@ -70,7 +70,7 @@ export class SignupComponent {
         Swal.showLoading();
       }
     });
-    this.auth.signUp(userRegister)
+    this.userService.signUp(userRegister)
       .then((message) => {
         Swal.fire({
           title: 'Registro completado', 

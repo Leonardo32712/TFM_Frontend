@@ -15,7 +15,7 @@ import { ProfileComponent } from './components/pages/profile/profile.component';
 import { SearchComponent } from './components/pages/search/search.component';
 import { LoginComponent } from './components/pages/login/login.component';
 import { SignupComponent } from './components/pages/signup/signup.component';
-import { AuthService } from './services/auth.service';
+import { UserService } from './services/user.service';
 
 import { environment } from '../environments/environment';
 import { MovieComponent } from './components/pages/movie/movie.component';
@@ -42,7 +42,7 @@ import { ActorComponent } from './components/pages/actor/actor.component';
     SweetAlert2Module.forRoot()
   ],
   providers: [
-    AuthService,
+    UserService,
     importProvidersFrom([
       provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
       provideAuth(() => getAuth())

@@ -4,7 +4,7 @@ import { BasicActor } from 'src/app/models/actor/basicActor';
 import { basicUser } from 'src/app/models/user/basicUser';
 import { Movie } from 'src/app/models/movie/movie';
 import { Review, ReviewWithMovieID } from 'src/app/models/review/review';
-import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import { MovieService } from 'src/app/services/movie.service';
 import { ReviewsService } from 'src/app/services/reviews.service';
 import Swal from 'sweetalert2';
@@ -25,7 +25,7 @@ export class MovieComponent {
     private router: Router,
     private movieService: MovieService,
     private reviewsService: ReviewsService,
-    private authService: AuthService
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class MovieComponent {
 
       this.reviewsService.getReviews(movieId).subscribe({
         next: (response) => {
-          this.authService.getBasicUserData()
+          this.userService.getBasicUserData()
             .then((user) => {
               if (user) {
                 this.user = user

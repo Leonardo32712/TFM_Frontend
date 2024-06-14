@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { userProfile } from 'src/app/models/user/userProfile';
 import { userUpdate } from 'src/app/models/user/userUpdate';
-import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,10 +16,10 @@ export class ProfileComponent {
   uploadedFile: File | null = null;
   readMode: boolean = true;
 
-  constructor(private auth: AuthService, private router: Router){}
+  constructor(private userService: UserService, private router: Router){}
 
   ngOnInit(){
-    this.auth.getUserProfile()
+    this.userService.getUserProfile()
     .then((user) => {
       this.userProfile = user;
       this.editedUserProfile = {...user,
@@ -78,7 +78,7 @@ export class ProfileComponent {
           if (this.uploadedFile) {
             this.editedUserProfile.photoURL = this.uploadedFile;
           }
-          this.auth.updateUserData(this.editedUserProfile).then((response) => {
+          this.userService.updateUserData(this.editedUserProfile).then((response) => {
             Swal.fire({
               title: 'Perfil actualizado',
               text: response,
@@ -125,7 +125,7 @@ export class ProfileComponent {
         }
       }
     }).then((text) => {
-      this.auth.requestVerification(text.value).subscribe({
+      this.userService.requestVerification(text.value).subscribe({
         next: (response) => {
           if(response.status == 201){
             Swal.fire({
@@ -163,7 +163,7 @@ export class ProfileComponent {
             Swal.showLoading();
           }
         });
-        this.auth.deleteAccount().then((message) => {
+        this.userService.deleteAccount().then((message) => {
           Swal.fire({
             title: 'Cuenta eliminada',
             text: message,
@@ -186,7 +186,7 @@ export class ProfileComponent {
   
 
   logOut(){
-    this.auth.logOut()
+    this.userService.logOut()
     window.location.reload()
   }
 }
