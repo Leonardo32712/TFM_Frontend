@@ -5,7 +5,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { userProfile } from '../models/user/userProfile';
 import { BACKEND_URL } from "src/environments/environment"
 import { userUpdate } from '../models/user/userUpdate';
-// import { Observable, from, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
