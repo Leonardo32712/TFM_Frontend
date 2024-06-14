@@ -7,6 +7,7 @@ import { userProfile } from '../models/user/userProfile';
 import { signUpUser } from '../models/user/signUpUser';
 import { BACKEND_URL } from "src/environments/environment"
 import { userUpdate } from '../models/user/userUpdate';
+import { from, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -137,6 +138,25 @@ export class AuthService {
 
   public logOut() {
     this.auth.signOut();
+  }
+
+  public requestVerification(requestText: string) {
+    return from(this.auth.currentUser?.getIdToken() ?? Promise.resolve('')).pipe(
+      switchMap((resultToken) => {
+        if (!resultToken) {
+          throw new Error('Failed to get ID token');
+        }
+
+        const headers: HttpHeaders = new HttpHeaders({
+          'Authorization': 'Bearer ' + resultToken,
+          'Content-Type': 'application/json'
+        });
+
+        const body = {text: requestText}
+
+        return this.http.post<{message: string}>(BACKEND_URL + '/users/verification', body, { headers, observe: 'response' });
+      })
+    );
   }
 
   public deleteAccount() {

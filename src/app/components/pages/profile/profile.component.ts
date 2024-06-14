@@ -101,7 +101,48 @@ export class ProfileComponent {
   }
 
   requestVerification(){
-
+    Swal.fire({
+      icon: 'info',
+      html: ` 
+        <div>
+          <p>Redacte un texto explicativo solicitando la verificación. A continuación, se detalla la información que debe incluir en su texto:</p>
+          <ul class="text-start">
+            <li><strong>Nombre Completo:</strong> Su nombre real para la verificación de identidad.</li>
+            <li><strong>Correo Electrónico:</strong> Asegúrese de usar el correo electrónico asociado a su cuenta.</li>
+            <li><strong>Justificación:</strong> Explique por qué solicita la verificación y proporcione cualquier detalle relevante que respalde su solicitud.</li>
+            <li><strong>Enlaces de Referencia:</strong> Incluya enlaces a cualquier perfil público, página web o artículo que demuestre su trabajo o identidad.</li>
+            <li><strong>Adjuntos:</strong> Si es necesario, mencione cualquier documento que pueda haber enviado por otros medios que respalde su solicitud (por ejemplo, identificación oficial, cartas de referencia, etc.).</li>
+          </ul>
+        </div>
+      `,
+      input: 'textarea',
+      preConfirm: (text: string) => {
+        if (!text) {
+          Swal.showValidationMessage('La reseña no puede estar vacía.');
+          return false;
+        } else {
+          return text;
+        }
+      }
+    }).then((text) => {
+      this.auth.requestVerification(text.value).subscribe({
+        next: (response) => {
+          if(response.status == 201){
+            Swal.fire({
+              icon: 'success',
+              title:  'Solicitud almacenada correctamente',
+              text: response.body?.message
+            })
+          }
+        }, error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error almacenando su solicitud',
+            text: JSON.stringify(error)
+          })
+        }
+      })
+    })
   }
 
   deleteAccount() {
