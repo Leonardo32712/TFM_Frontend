@@ -4,8 +4,11 @@
             <div class="row mb-5">
                 <h1 class="mb-4">{{ actorData.name }}</h1>
                 <div class="col-3">
-                    <img [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + actorData.profile_path"
-                        alt="{{ actorData.name }}" width="230px" class="border border-black border-5">
+                    <img *ngIf="actorData.profile_path" 
+                    [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + actorData.profile_path"
+                    alt="{{ actorData.name }}" width="230px" class="border border-black border-5">
+                    <img *ngIf="!actorData.profile_path" src="/assets/defaultImage.png" 
+                    alt="default poster" width="230px" class="border border-black border-5">
                 </div>
                 <div class="col-9">
                     <h4>Biografía</h4>
@@ -34,7 +37,8 @@
                           *ngFor="let movie of this.movies">
                             <a [href]="'/movie?id=' + movie.id" class="link-light link-underline link-underline-opacity-0">
                               <img *ngIf="movie.poster_path" [src]="movie.poster_path" [alt]="movie.title + ' poster'" width="200px" class="border border-2 border-black">
-                              <img *ngIf="!movie.poster_path" src="/assets/defaultImage.png" alt="default poster" width="140px" class="border border-2 border-black">
+                              <img *ngIf="!movie.poster_path" src="/assets/defaultImage.png" alt="default poster" width="200px" class="border border-2 border-black">
+                              <p *ngIf="!movie.poster_path" class="link-danger link-underline-opacity-0">{{movie.title}}</p>
                             </a>
                           </div>
                         </div>

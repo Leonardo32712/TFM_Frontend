@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
 import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "../controllers/auth.controller.error"
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { userProfile } from '../models/user/userProfile';
 import { BACKEND_URL } from "src/environments/environment"
 import { userUpdate } from '../models/user/userUpdate';
-import { Observable, from, switchMap } from 'rxjs';
+// import { Observable, from, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -48,9 +48,7 @@ export class UserService {
         }
       });
 
-      this.http.post(BACKEND_URL + '/users/signup', formData, {
-        observe: 'response'
-      })
+      this.http.post(BACKEND_URL + '/users/signup', formData, { observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.status == 201) {
@@ -150,23 +148,36 @@ export class UserService {
     this.auth.signOut();
   }
 
-  public requestVerification(requestText: string): Observable<HttpResponse<{message: string}>> {
-    return from(this.auth.currentUser?.getIdToken() ?? Promise.resolve('')).pipe(
-      switchMap((resultToken) => {
-        if (!resultToken) {
-          throw new Error('Failed to get ID token');
-        }
+  public requestVerification(requestText: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      if (this.auth.currentUser != null) {
+        this.auth.currentUser.getIdToken()
+        .then((idToken) => {
+          const headers: HttpHeaders = new HttpHeaders({
+            'Authorization': 'Bearer ' + idToken,
+            'Content-Type': 'application/json '
+          });
 
-        const headers: HttpHeaders = new HttpHeaders({
-          'Authorization': 'Bearer ' + resultToken,
-          'Content-Type': 'application/json '
-        });
-
-        const body = {text: requestText}
-
-        return this.http.post<{message: string}>(BACKEND_URL + '/users/verification', body, { headers, observe: 'response' });
-      })
-    );
+          const body = {text: requestText}
+          this.http.post<{message: string}>(BACKEND_URL + '/users/verification', body, { headers , observe: 'response' })
+          .subscribe({
+            next: (response) => {
+              if (response.status == 201) {
+                resolve('Request verification saved.')
+              } else {
+                reject('Unexpected error saving request.')
+              }
+            }, error: (_error) => {
+              reject('Error saving request.')
+            }
+          })
+        }).catch((_error) => {
+          reject('User not logged in')
+        })
+      } else {
+        reject('User not logged in')
+      }   
+    })
   }
 
   public deleteAccount(): Promise<string> {
