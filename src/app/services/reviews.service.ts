@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { ReviewWithMovieID } from '../models/review/review';
+import { Review } from '../models/review/review';
 import { from, switchMap } from "rxjs";
 import { BACKEND_URL } from "src/environments/environment";
 import { AllReviews } from '../models/review/allReviews';
@@ -18,7 +18,7 @@ export class ReviewsService {
     return this.http.get<AllReviews>(BACKEND_URL + '/reviews', { params })
   }
 
-  public postReview(review: ReviewWithMovieID) {
+  public postReview(review: Review) {
     return from(this.auth.currentUser?.getIdToken() ?? Promise.resolve('')).pipe(
       switchMap((resultToken) => {
         if (!resultToken) {
@@ -30,6 +30,9 @@ export class ReviewsService {
           'Content-Type': 'application/x-www-form-urlencoded'
         });
 
+        if(!review.movieId){
+          throw new Error('Failed to get movie identifier');
+        }
         const params: HttpParams = new HttpParams().set('movie_id', review.movieId);
 
         const body: HttpParams = new HttpParams()

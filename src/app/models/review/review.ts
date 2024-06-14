@@ -1,13 +1,5 @@
 export interface Review {
-    uid: string
-    username: string
-    photoURL: string
-    score: number
-    text: string
-}
-
-export interface ReviewWithMovieID {
-    movieId: number
+    movieId: number | undefined
     uid: string
     username: string
     photoURL: string
