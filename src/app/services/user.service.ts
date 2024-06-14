@@ -3,7 +3,6 @@ import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
 import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "../controllers/auth.controller.error"
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { userProfile } from '../models/user/userProfile';
-import { signUpUser } from '../models/user/signUpUser';
 import { BACKEND_URL } from "src/environments/environment"
 import { userUpdate } from '../models/user/userUpdate';
 import { Observable, from, switchMap } from 'rxjs';
@@ -29,15 +28,25 @@ export class UserService {
     })
   }
 
-  public signUp(user: signUpUser): Promise<string> {
+  public signUp(newUser: userUpdate): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       const formData: FormData = new FormData();
-      formData.append('displayName', user.username);
-      formData.append('email', user.email);
-      formData.append('password', user.password);
-      if (user.profilePic) {
-        formData.append('photo', user.profilePic, user.profilePic.name);
+      if(newUser.displayName == null || newUser.email == null || newUser.password == null){
+        reject('Bad request. There are empty fields.')
       }
+
+      const fields: (keyof userUpdate)[] = ['displayName', 'email', 'password', 'photo'];
+
+      fields.forEach(field => {
+        const value = newUser[field];
+        if (value) {
+          if (value instanceof File) {
+            formData.append(field, value, value.name);
+          } else if (typeof value === 'string') {
+            formData.append(field, value);
+          }
+        }
+      });
 
       this.http.post(BACKEND_URL + '/users/signup', formData, {
         observe: 'response'
@@ -81,13 +90,13 @@ export class UserService {
         this.auth.currentUser.getIdToken()
         .then((idToken) => {
           const formData: FormData = new FormData();
-          const fields: (keyof userUpdate)[] = ['displayName', 'email', 'photoURL'];
+          const fields: (keyof userUpdate)[] = ['displayName', 'email', 'photo'];
 
           fields.forEach(field => {
             const value = newUserData[field];
             if (value) {
-              if (field === 'photoURL' && value instanceof File) {
-                formData.append('photo', value, value.name);
+              if (value instanceof File) {
+                formData.append(field, value, value.name);
               } else if (typeof value === 'string') {
                 formData.append(field, value);
               }

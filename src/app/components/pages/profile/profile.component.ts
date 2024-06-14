@@ -23,7 +23,8 @@ export class ProfileComponent {
     .then((user) => {
       this.userProfile = user;
       this.editedUserProfile = {...user,
-        photoURL: null
+        photo: null,
+        password: null
       };
     }).catch(() => {
       this.router.navigate(['/home'])
@@ -31,7 +32,7 @@ export class ProfileComponent {
   }
   
   changeMode(){
-    this.editedUserProfile = {...this.userProfile, photoURL: null}
+    this.editedUserProfile = {...this.userProfile, photo: null, password: null}
     this.uploadedFile = null;
     this.readMode = !this.readMode
   }
@@ -76,7 +77,7 @@ export class ProfileComponent {
       }).then((result) => {
         if (result.isConfirmed) {
           if (this.uploadedFile) {
-            this.editedUserProfile.photoURL = this.uploadedFile;
+            this.editedUserProfile.photo = this.uploadedFile;
           }
           this.userService.updateUserData(this.editedUserProfile).then((response) => {
             Swal.fire({

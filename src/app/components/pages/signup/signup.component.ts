@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { signUpUser } from 'src/app/models/user/signUpUser';
+import { userUpdate } from 'src/app/models/user/userUpdate';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
@@ -55,11 +55,11 @@ export class SignupComponent {
       return;
     }
 
-    const userRegister: signUpUser = {
-      username: this.username,
+    const userRegister: userUpdate = {
+      displayName: this.username,
       email: this.email,
       password: this.password,
-      profilePic: this.profilePic
+      photo: this.profilePic
     }
 
     Swal.fire({
