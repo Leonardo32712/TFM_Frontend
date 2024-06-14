@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { basicUser } from 'src/app/models/user/basicUser';
+import { userProfile } from 'src/app/models/user/userProfile';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HeaderComponent {
 
-  user: basicUser = {} as basicUser
+  user: userProfile = {} as userProfile
   query: string = ''
   userLogged: boolean = false
   showButtons: boolean = true

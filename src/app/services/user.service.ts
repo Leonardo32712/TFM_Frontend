@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
 import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "../controllers/auth.controller.error"
-import { basicUser } from '../models/user/basicUser';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { userProfile } from '../models/user/userProfile';
 import { signUpUser } from '../models/user/signUpUser';
@@ -62,6 +61,7 @@ export class UserService {
       user(this.auth).subscribe((loggedUser) => {
         if (loggedUser) {
           const user: userProfile = {
+            uid: loggedUser.uid,
             email: loggedUser.email,
             emailVerified: loggedUser.emailVerified,
             displayName: loggedUser.displayName,
@@ -118,12 +118,13 @@ export class UserService {
     })
   }
 
-  public getBasicUserData(): Promise<basicUser | undefined> {
-    return new Promise<basicUser | undefined>((resolve, _reject) => {
+  public getBasicUserData(): Promise<userProfile | undefined> {
+    return new Promise<userProfile | undefined>((resolve, _reject) => {
       user(this.auth).subscribe((loggedUser) => {
         if (loggedUser) {
-          const user: basicUser = {
+          const user: userProfile = {
             uid: loggedUser.uid,
+            email: loggedUser.email,
             emailVerified: loggedUser.emailVerified,
             displayName: loggedUser.displayName,
             photoURL: loggedUser.photoURL

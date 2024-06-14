@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { BasicActor } from 'src/app/models/actor/basicActor';
-import { basicUser } from 'src/app/models/user/basicUser';
 import { Movie } from 'src/app/models/movie/movie';
 import { Review, ReviewWithMovieID } from 'src/app/models/review/review';
 import { UserService } from 'src/app/services/user.service';
 import { MovieService } from 'src/app/services/movie.service';
 import { ReviewsService } from 'src/app/services/reviews.service';
 import Swal from 'sweetalert2';
+import { userProfile } from 'src/app/models/user/userProfile';
 
 @Component({
   selector: 'app-movie',
@@ -19,7 +19,7 @@ export class MovieComponent {
   public casting: BasicActor[] = []
   public criticsReviews: Record<string, Review> = {} as Record<string, Review>
   public spectatorReviews: Record<string, Review> = {} as Record<string, Review>
-  public user: basicUser = {} as basicUser
+  public user: userProfile = {} as userProfile
 
   constructor(
     private router: Router,
