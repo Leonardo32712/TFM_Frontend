@@ -57,29 +57,24 @@ export class MovieComponent {
         },
       });
 
-      this.reviewsService.getReviews(movieId).subscribe({
-        next: (response) => {
-          this.userService.getBasicUserData().then((user) => {
-            if (user) {
-              this.user = user;
-              this.criticsReviews = this.sortReviews(
-                response.critics,
-                user.uid
-              );
-              this.spectatorReviews = this.sortReviews(
-                response.spectators,
-                user.uid
-              );
-            } else {
-              this.criticsReviews = response.critics;
-              this.spectatorReviews = response.spectators;
-            }
-          });
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      this.reviewsService.getReviews(movieId).then((reviews) => {
+        this.userService.getBasicUserData().then((user) => {
+          if (user) {
+            this.user = user;
+            this.criticsReviews = this.sortReviews(
+              reviews.critics,
+              user.uid
+            );
+            this.spectatorReviews = this.sortReviews(
+              reviews.spectators,
+              user.uid
+            );
+          } else {
+            this.criticsReviews = reviews.critics;
+            this.spectatorReviews = reviews.spectators;
+          }
+        });
+      })
     } else {
       this.router.navigate(['/home']);
     }

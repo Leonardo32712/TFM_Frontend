@@ -13,9 +13,22 @@ export class ReviewsService {
 
   constructor(private http: HttpClient, private auth: Auth) { }
 
-  public getReviews(movieId: string) {
+  public getReviews(movieId: string): Promise<AllReviews> {
     const params = new HttpParams().set('movie_id', movieId)
-    return this.http.get<AllReviews>(BACKEND_URL + '/reviews', { params })
+    return new Promise<AllReviews>((resolve, reject) => {
+      this.http.get<AllReviews>(BACKEND_URL + '/reviews', { params, observe: 'response' })
+      .subscribe({
+        next: (response) => {
+          if(response.body){
+            resolve(response.body)
+          } else {
+            reject('Unexpected error getting reviews.')
+          }
+        }, error: (error) => {
+          reject(error)
+        }
+      })
+    })
   }
 
   public postReview(newReview: Review) {
