@@ -233,31 +233,21 @@ export class MovieComponent {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.reviewsService.deleteReview(reviewId, this.movie.id).subscribe({
-          next: (_response) => {
-            Swal.fire({
-              title: 'Reseña eliminada',
-              text: 'Tu reseña ha sido eliminada con éxito.',
-              icon: 'success',
-              showCloseButton: true,
-            }).then(() => {
-              if (this.user.emailVerified) {
-                delete this.criticsReviews[reviewId];
-              } else {
-                delete this.spectatorReviews[reviewId];
-              }
-            });
-          },
-          error: (error) => {
-            console.log(error);
-            Swal.fire({
-              title: 'Error',
-              text: 'Hubo un problema al eliminar tu reseña. Por favor, intenta de nuevo.',
-              icon: 'error',
-              showCloseButton: true,
-            });
-          },
-        });
+        this.reviewsService.deleteReview(reviewId, this.movie.id)
+        .then((response) => {
+          Swal.fire({
+            title: 'Reseña eliminada',
+            text: response,
+            icon: 'success',
+            showCloseButton: true
+          }).then(() => {
+            if (this.user.emailVerified) {
+              delete this.criticsReviews[reviewId];
+            } else {
+              delete this.spectatorReviews[reviewId];
+            }
+          });
+        })
       }
     });
   }

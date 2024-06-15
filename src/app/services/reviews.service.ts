@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Review } from '../models/review/review';
-import { from, switchMap } from "rxjs";
 import { BACKEND_URL } from "src/environments/environment";
 import { AllReviews } from '../models/review/allReviews';
 
@@ -58,9 +57,9 @@ export class ReviewsService {
           }
         });
 
-        this.http.post<{message: string, reviewId: string}>(BACKEND_URL + '/reviews', body, 
-          { params, headers, observe: 'response' }
-        ).subscribe({
+        this.http.post<{message: string, reviewId: string}>
+        (BACKEND_URL + '/reviews', body, { params, headers, observe: 'response' })
+        .subscribe({
           next: (response) => {
             if (response.status == 201 && response.body) {
               return resolve(response.body)
@@ -75,23 +74,36 @@ export class ReviewsService {
     })
   }
 
-  public deleteReview(reviewId: string, movieId: number) {
-    return from(this.auth.currentUser?.getIdToken() ?? Promise.resolve('')).pipe(
-      switchMap((resultToken) => {
-        if (!resultToken) {
-          throw new Error('Failed to get ID token');
-        }
+  public deleteReview(reviewId: string, movieId: number): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      if (!this.auth.currentUser) {
+        return reject('User not logged in.')
+      }
 
+      this.auth.currentUser.getIdToken()
+      .then((idToken) => {
         const headers: HttpHeaders = new HttpHeaders({
-          'Authorization': 'Bearer ' + resultToken
+          'Authorization': 'Bearer ' + idToken
         });
-
+  
         const params: HttpParams = new HttpParams()
           .set('movie_id', movieId)
           .set('review_id', reviewId)
-
-        return this.http.delete<{ message: string, reviewId: string }>(BACKEND_URL + '/reviews', { headers, params });
+  
+        this.http.delete<{ message: string }>
+        (BACKEND_URL + '/reviews', { headers, params, observe: 'response' })
+        .subscribe({
+          next: (response) => {
+            if(response.body && response.status == 200){
+              resolve(response.body.message)
+            } else {
+              reject('Unexpected error deleting review')
+            }
+          }, error: (error) => {
+            reject(error)
+          }
+        })
       })
-    );
+    })
   }
 }
