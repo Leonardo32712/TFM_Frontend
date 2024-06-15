@@ -9,6 +9,7 @@ import { ReviewsService } from 'src/app/services/reviews.service';
 import Swal from 'sweetalert2';
 import { userProfile } from 'src/app/models/user/userProfile';
 import { HttpClient } from '@angular/common/http';
+import { ActorService } from 'src/app/services/actor.service';
 
 @Component({
   selector: 'app-movie',
@@ -19,15 +20,13 @@ export class MovieComponent {
   public movie: Movie = {} as Movie;
   public casting: Actor[] = [];
   public criticsReviews: Record<string, Review> = {} as Record<string, Review>;
-  public spectatorReviews: Record<string, Review> = {} as Record<
-    string,
-    Review
-  >;
+  public spectatorReviews: Record<string, Review> = {} as Record<string, Review>;
   public user: userProfile = {} as userProfile;
 
   constructor(
     private router: Router,
     private movieService: MovieService,
+    private actorService: ActorService,
     private reviewsService: ReviewsService,
     private userService: UserService,
     private http: HttpClient
@@ -45,14 +44,11 @@ export class MovieComponent {
         console.log(error)
       })
 
-      this.movieService.getCasting(movieId).subscribe({
-        next: (response) => {
-          this.casting = response;
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      this.actorService.getCasting(movieId).then((casting) => {
+        this.casting = casting
+      }).catch((error) => {
+        console.log(error)
+      })
 
       this.reviewsService.getReviews(movieId).then((reviews) => {
         this.userService.getBasicUserData().then((user) => {

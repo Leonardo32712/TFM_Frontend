@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActorProfile } from 'src/app/models/actor/actorProfile';
 import { MoviePoster } from 'src/app/models/movie/moviePoster';
-import { MovieService } from 'src/app/services/movie.service';
+import { ActorService } from 'src/app/services/actor.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-actor',
@@ -11,12 +12,12 @@ import { MovieService } from 'src/app/services/movie.service';
 })
 export class ActorComponent {
 
-  actorData: ActorProfile = {} as ActorProfile
+  profile: ActorProfile = {} as ActorProfile
   movies: MoviePoster[] = []
 
   constructor(
     private router: Router, 
-    private movieService: MovieService
+    private actorService: ActorService
   ) {}
 
   ngOnInit() {
@@ -25,23 +26,24 @@ export class ActorComponent {
     const actorId = urlParams.get('id');
 
     if(actorId){
-      this.movieService.getActor(actorId).subscribe({
-        next: (response) => {
-          this.actorData = response
-        }, error: (error) => {
-          console.log(error)
-        }
+      this.actorService.getActor(actorId).then((profile) => {
+        this.profile = profile
+      }).catch((error) => {
+        console.log(error)
       })
 
-      this.movieService.getMoviesByActor(actorId).subscribe({
-        next: (response) => {
-          this.movies = response
-        }, error: (error) => {
-          console.log(error)
-        }
+      this.actorService.getMoviesByActor(actorId).then((movies) => {
+        this.movies = movies
+      }).catch((error) => {
+        console.log(error)
       })
     } else {
-      this.router.navigate(['/home'])
+      Swal.fire({
+        title: 'Invalid URL',
+        text: 'No actor id found on URL.'
+      }).then(() => {
+        this.router.navigate(['/home'])
+      })
     }
   }
 }
