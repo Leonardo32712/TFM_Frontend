@@ -83,44 +83,43 @@ export class UserService {
 
   public updateUserData(newUserData: userUpdate): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      if (this.auth.currentUser != null) {
-        this.auth.currentUser.getIdToken()
-        .then((idToken) => {
-          const formData: FormData = new FormData();
-          const fields: (keyof userUpdate)[] = ['displayName', 'email', 'photo'];
+      if (!this.auth.currentUser) {
+        return reject('User not logged in.')
+      }
+      this.auth.currentUser.getIdToken()
+      .then((idToken) => {
+        const formData: FormData = new FormData();
+        const fields: (keyof userUpdate)[] = ['displayName', 'email', 'photo'];
 
-          fields.forEach(field => {
-            const value = newUserData[field];
-            if (value) {
-              if (value instanceof File) {
-                formData.append(field, value, value.name);
-              } else if (typeof value === 'string') {
-                formData.append(field, value);
-              }
+        fields.forEach(field => {
+          const value = newUserData[field];
+          if (value) {
+            if (value instanceof File) {
+              formData.append(field, value, value.name);
+            } else if (typeof value === 'string') {
+              formData.append(field, value);
             }
-          });
-          
-          const headers = new HttpHeaders({
-            'Authorization': 'Bearer ' + idToken
-          });
-          this.http.put(BACKEND_URL + '/users/updateData', formData, { headers , observe: 'response' })
-          .subscribe({
-            next: (response) => {
-              if (response.status == 201) {
-                resolve('Usuario actualizado correctamente')
-              } else {
-                reject('Error inesperado en la actualización de usuario')
-              }
-            }, error: (error) => {
-              reject(error)
+          }
+        });
+        
+        const headers = new HttpHeaders({
+          'Authorization': 'Bearer ' + idToken
+        });
+        this.http.put(BACKEND_URL + '/users/updateData', formData, { headers , observe: 'response' })
+        .subscribe({
+          next: (response) => {
+            if (response.status == 201) {
+              resolve('Usuario actualizado correctamente')
+            } else {
+              reject('Error inesperado en la actualización de usuario')
             }
-          })
-        }).catch((_error) => {
-          reject('Usuario no autenticado')
+          }, error: (error) => {
+            reject(error)
+          }
         })
-      } else {
+      }).catch((_error) => {
         reject('Usuario no autenticado')
-      }   
+      })
     })
   }
 
@@ -149,65 +148,63 @@ export class UserService {
 
   public requestVerification(requestText: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      if (this.auth.currentUser != null) {
-        this.auth.currentUser.getIdToken()
-        .then((idToken) => {
-          const headers: HttpHeaders = new HttpHeaders({
-            'Authorization': 'Bearer ' + idToken,
-            'Content-Type': 'application/json '
-          });
+      if (!this.auth.currentUser) {
+        return reject('User not logged in.')
+      }
+      this.auth.currentUser.getIdToken()
+      .then((idToken) => {
+        const headers: HttpHeaders = new HttpHeaders({
+          'Authorization': 'Bearer ' + idToken,
+          'Content-Type': 'application/json '
+        });
 
-          const body = {text: requestText}
-          this.http.post<{message: string}>(BACKEND_URL + '/users/verification', body, { headers , observe: 'response' })
-          .subscribe({
-            next: (response) => {
-              if (response.status == 201) {
-                resolve('Request verification saved.')
-              } else {
-                reject('Unexpected error saving request.')
-              }
-            }, error: (_error) => {
-              reject('Error saving request.')
+        const body = {text: requestText}
+        this.http.post<{message: string}>(BACKEND_URL + '/users/verification', body, { headers , observe: 'response' })
+        .subscribe({
+          next: (response) => {
+            if (response.status == 201) {
+              resolve('Request verification saved.')
+            } else {
+              reject('Unexpected error saving request.')
             }
-          })
-        }).catch((_error) => {
-          reject('User not logged in')
+          }, error: (_error) => {
+            reject('Error saving request.')
+          }
         })
-      } else {
+      }).catch((_error) => {
         reject('User not logged in')
-      }   
+      })
     })
   }
 
   public deleteAccount(): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      if (this.auth.currentUser != null) {
-        this.auth.currentUser.getIdToken()
-        .then((idToken) => {
-          const headers = new HttpHeaders({
-            'Authorization': 'Bearer ' + idToken
-          });
-
-          this.http.delete<string>(BACKEND_URL + '/users', {
-            headers: headers,
-            observe: 'response'
-          }).subscribe({
-            next: (response) => {
-              if (response.status == 200) {
-                resolve('Su cuenta ha sido eliminada exitosamente.')
-              } else {
-                reject('Error inesperado en la eliminación de su cuenta')
-              }
-            }, error: (error) => {
-              reject(deleteAccountErrorHandler(error))
-            }
-          })
-        }).catch((_error) => {
-          reject('Usuario no autenticado')
-        })
-      } else {
-        reject('Usuario no autenticado')
+      if (!this.auth.currentUser) {
+        return reject('User not logged in.')
       }
+      this.auth.currentUser.getIdToken()
+      .then((idToken) => {
+        const headers = new HttpHeaders({
+          'Authorization': 'Bearer ' + idToken
+        });
+
+        this.http.delete<string>(BACKEND_URL + '/users', {
+          headers: headers,
+          observe: 'response'
+        }).subscribe({
+          next: (response) => {
+            if (response.status == 200) {
+              resolve('Su cuenta ha sido eliminada exitosamente.')
+            } else {
+              reject('Error inesperado en la eliminación de su cuenta')
+            }
+          }, error: (error) => {
+            reject(deleteAccountErrorHandler(error))
+          }
+        })
+      }).catch((_error) => {
+        reject('Usuario no autenticado')
+      })
     })
   }
 }

@@ -45,8 +45,9 @@ export class ReviewsService {
           }
         });
 
-        this.http.post<{message: string, reviewId: string}>(BACKEND_URL + '/reviews', body, { params, headers, observe: 'response' })
-        .subscribe({
+        this.http.post<{message: string, reviewId: string}>(BACKEND_URL + '/reviews', body, 
+          { params, headers, observe: 'response' }
+        ).subscribe({
           next: (response) => {
             if (response.status == 201 && response.body) {
               return resolve(response.body)
