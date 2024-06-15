@@ -11,7 +11,7 @@ import { MovieService } from 'src/app/services/movie.service';
 export class SearchComponent {
 
   query: string = ''
-  results: MoviePoster[] = []
+  movies: MoviePoster[] = []
 
   constructor(
     private movieService: MovieService,
@@ -23,8 +23,10 @@ export class SearchComponent {
     if(this.query == '')
       this.router.navigate(['home'])
 
-    this.movieService.searchMovie(this.query,1).subscribe((result) => {
-      this.results = result
+    this.movieService.searchMovie(this.query,1).then((movies) => {
+      this.movies = movies
+    }).catch((error) => {
+      console.log(error)
     })
   }
 

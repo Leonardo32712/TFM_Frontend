@@ -1,7 +1,7 @@
-<h2 *ngIf="results.length != 0" class="search-title">Resultados para: {{this.query}}</h2>
-<h2 *ngIf="results.length == 0" class="search-title">No se encuentran resultados para: {{this.query}}</h2>
+<h2 *ngIf="movies.length != 0" class="search-title">Resultados para: {{this.query}}</h2>
+<h2 *ngIf="movies.length == 0" class="search-title">No se encuentran resultados para: {{this.query}}</h2>
 <div class="movie-list">
-    <div *ngFor="let movie of results" class="movie-card">
+    <div *ngFor="let movie of movies" class="movie-card">
         <a [href]="'/movie?id=' + movie.id" class="link-danger link-underline-opacity-0 fw-semibold">
             <img *ngIf="movie.poster_path" [src]="movie.poster_path" [alt]="movie.title + ' poster'">
             <img *ngIf="!movie.poster_path" src="/assets/defaultImage.png" alt="default poster">

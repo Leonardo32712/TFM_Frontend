@@ -18,12 +18,16 @@ export class HomeComponent {
   ){}
 
   ngOnInit(){
-    this.movieService.getCarousel().subscribe((value) => {
-      this.carousel = value
+    this.movieService.getCarousel().then((carousel) => {
+      this.carousel = carousel
+    }).catch((error) => {
+      console.log(error)
     })
 
-    this.movieService.getHomeList().subscribe((value) => {
-      this.list = value
+    this.movieService.getHomeList().then((list) => {
+      this.list = list
+    }).catch((error) => {
+      console.log(error)
     })
   }
 }

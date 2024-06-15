@@ -39,14 +39,11 @@ export class MovieComponent {
     const movieId = urlParams.get('id');
 
     if (movieId) {
-      this.movieService.getMovie(movieId).subscribe({
-        next: (response) => {
-          this.movie = response;
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      this.movieService.getMovie(movieId).then((movie) => {
+        this.movie = movie
+      }).catch((error) => {
+        console.log(error)
+      })
 
       this.movieService.getCasting(movieId).subscribe({
         next: (response) => {
