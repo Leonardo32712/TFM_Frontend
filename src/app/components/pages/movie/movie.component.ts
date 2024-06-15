@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { BasicActor } from 'src/app/models/actor/basicActor';
+import { Actor } from 'src/app/models/actor/actor';
 import { Movie } from 'src/app/models/movie/movie';
 import { Review } from 'src/app/models/review/review';
 import { UserService } from 'src/app/services/user.service';
@@ -17,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MovieComponent {
   public movie: Movie = {} as Movie;
-  public casting: BasicActor[] = [];
+  public casting: Actor[] = [];
   public criticsReviews: Record<string, Review> = {} as Record<string, Review>;
   public spectatorReviews: Record<string, Review> = {} as Record<
     string,
@@ -198,37 +198,33 @@ export class MovieComponent {
       score,
       text: reviewText,
     };
-    this.reviewsService.postReview(newReview).subscribe({
-      next: (response) => {
-        Swal.fire({
-          title: 'Reseña publicada',
-          text: response.message,
-          icon: 'success',
-          showCloseButton: true,
-        }).then(() => {
-          if (this.user.emailVerified) {
-            this.criticsReviews = {
-              [response.reviewId]: newReview as Review,
-              ...this.criticsReviews,
-            };
-          } else {
-            this.spectatorReviews = {
-              [response.reviewId]: newReview as Review,
-              ...this.spectatorReviews,
-            };
-          }
-        });
-      },
-      error: (error) => {
-        console.log(error);
-        Swal.fire({
-          title: 'Error',
-          text: 'Hubo un problema al publicar tu reseña. Por favor, intenta de nuevo.',
-          icon: 'error',
-          showCloseButton: true,
-        });
-      },
-    });
+    this.reviewsService.postReview(newReview).then((response) => {
+      Swal.fire({
+        title: 'Reseña publicada',
+        text: response.message,
+        icon: 'success',
+        showCloseButton: true,
+      }).then(() => {
+        if (this.user.emailVerified) {
+          this.criticsReviews = {
+            [response.reviewId]: newReview as Review,
+            ...this.criticsReviews,
+          };
+        } else {
+          this.spectatorReviews = {
+            [response.reviewId]: newReview as Review,
+            ...this.spectatorReviews,
+          };
+        }
+      });
+    }).catch((error) => {
+      Swal.fire({
+        title: 'Error',
+        text: error,
+        icon: 'error',
+        showCloseButton: true,
+      });
+    })
   }
 
   deleteReview(reviewId: string) {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actor } from 'src/app/models/actor/actor';
+import { ActorProfile } from 'src/app/models/actor/actorProfile';
 import { MoviePoster } from 'src/app/models/movie/moviePoster';
 import { MovieService } from 'src/app/services/movie.service';
 
@@ -11,7 +11,7 @@ import { MovieService } from 'src/app/services/movie.service';
 })
 export class ActorComponent {
 
-  actorData: Actor = {} as Actor
+  actorData: ActorProfile = {} as ActorProfile
   movies: MoviePoster[] = []
 
   constructor(

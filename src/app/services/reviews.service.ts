@@ -18,33 +18,47 @@ export class ReviewsService {
     return this.http.get<AllReviews>(BACKEND_URL + '/reviews', { params })
   }
 
-  public postReview(review: Review) {
-    return from(this.auth.currentUser?.getIdToken() ?? Promise.resolve('')).pipe(
-      switchMap((resultToken) => {
-        if (!resultToken) {
-          throw new Error('Failed to get ID token');
+  public postReview(newReview: Review) {
+    return new Promise<{message: string, reviewId: string}>((resolve, reject) => {
+      if (!this.auth.currentUser) {
+        return reject('User not logged in.')
+      }
+
+      this.auth.currentUser.getIdToken()
+      .then((idToken) => {
+        if (!newReview.movieId) {
+          return reject('Bad request. Movie ID not provided.')
         }
+        const params: HttpParams = new HttpParams().set('movie_id', newReview.movieId);
 
         const headers: HttpHeaders = new HttpHeaders({
-          'Authorization': 'Bearer ' + resultToken,
+          'Authorization': 'Bearer ' + idToken,
           'Content-Type': 'application/x-www-form-urlencoded'
         });
 
-        if(!review.movieId){
-          throw new Error('Failed to get movie identifier');
-        }
-        const params: HttpParams = new HttpParams().set('movie_id', review.movieId);
+        let body: HttpParams = new HttpParams()
+        const fields: (keyof Review)[] = ['photoURL', 'score', 'text', 'uid', 'username'];
+        fields.forEach(field => {
+          const value = newReview[field];
+          if (value) {
+            body = body.set(field, value);
+          }
+        });
 
-        const body: HttpParams = new HttpParams()
-          .set('uid', review.uid)
-          .set('username', review.username)
-          .set('photoURL', review.photoURL)
-          .set('score', review.score)
-          .set('text', review.text);
-
-        return this.http.post<{ message: string, reviewId: string }>(BACKEND_URL + '/reviews', body, { headers, params });
+        this.http.post<{message: string, reviewId: string}>(BACKEND_URL + '/reviews', body, { params, headers, observe: 'response' })
+        .subscribe({
+          next: (response) => {
+            if (response.status == 201 && response.body) {
+              return resolve(response.body)
+            } else {
+              return reject('Unexpecting error updating review.')
+            }
+          }, error: (error: any) => {
+            return reject(JSON.stringify(error))
+          }
+        })
       })
-    );
+    })
   }
 
   public deleteReview(reviewId: string, movieId: number) {

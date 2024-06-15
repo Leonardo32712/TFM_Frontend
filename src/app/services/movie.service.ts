@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BACKEND_URL } from 'src/environments/environment';
-import { BasicActor } from '../models/actor/basicActor';
 import { Actor } from '../models/actor/actor';
+import { ActorProfile } from '../models/actor/actorProfile';
 import { MoviePoster } from '../models/movie/moviePoster';
 import { CarouselMovie } from "../models/movie/carouselMovie"
 import { Movie } from "../models/movie/movie"
@@ -34,12 +34,12 @@ export class MovieService {
 
   public getCasting(movieId: string) {
     const params = new HttpParams().set('movie_id', movieId)
-    return this.http.get<BasicActor[]>(BACKEND_URL + '/movies/credits', { params })
+    return this.http.get<Actor[]>(BACKEND_URL + '/movies/credits', { params })
   }
 
   public getActor(actorId: string) {
     const params = new HttpParams().set('actor_id', actorId)
-    return this.http.get<Actor>(BACKEND_URL + '/movies/actor', { params })
+    return this.http.get<ActorProfile>(BACKEND_URL + '/movies/actor', { params })
   }
 
   public getMoviesByActor(actorId: string) {
