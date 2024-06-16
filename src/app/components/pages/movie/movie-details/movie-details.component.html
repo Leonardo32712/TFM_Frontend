@@ -1,0 +1,42 @@
+<div class="row mb-5">
+    <h1 class="mb-4">{{ movie.title }}</h1>
+    <div class="col-3">
+      <img *ngIf="movie.poster_path" 
+      [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + movie.poster_path" 
+      alt="{{ movie.title }}" width="230px" class="border border-black border-5">
+      <img *ngIf="!movie.poster_path" src="/assets/defaultImage.png" 
+      alt="default poster" width="230px" class="border border-black border-5">
+    </div>
+    <div class="col-9">
+      <h4>Sinopsis</h4>
+      <p>{{ movie.overview }}</p>
+    </div>
+  </div>
+  <div class="row justify-content-center mb-4">
+    <div class="col-6">
+      <h2>Detalles</h2>
+      <ul class="">
+        <li>
+          <strong>Fecha de lanzamiento:</strong>
+          {{ movie.release_date | date : "dd-MM-yyyy" }}
+        </li>
+        <li><strong>Duración:</strong> {{ movie.runtime }} minutos</li>
+        <li><strong>Presupuesto:</strong> {{ movie.budget | currency }}</li>
+        <li>
+          <strong>Recaudación:</strong> {{ movie.revenue | currency }}
+        </li>
+        <li><strong>Estado:</strong> {{ movie.status }}</li>
+      </ul>
+    </div>
+    <div class="col-6">
+      <div class="row">
+        <h2>Géneros</h2>
+        <div class="col-4" *ngFor="let genre of movie.genres">
+          <div class="rounded bg-light-subtle m-1 p-2 text-dark text-center fw-semibold">
+            {{ genre.name }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

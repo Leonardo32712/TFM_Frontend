@@ -1,0 +1,94 @@
+<div class="row justify-content-between">
+    <div class="col-2">
+      <h2 class="mb-3">Reseñas</h2>
+    </div>
+    <div class="col-3 text-end">
+      <button class="btn btn-danger fs-5 fw-semibold" (click)="openReviewEditor()">
+        Publicar Reseña
+      </button>
+    </div>
+  </div>
+  <div class="row p-3 m-3 justify-content-around text-center text-light">
+    <div class="col-5">
+      <div class="rounded bg-dark bg-gradient p-4 m-1">
+        <h4>
+          Espectadores:
+          {{
+          calculateAverageRating(spectatorReviews) == 0
+          ? "Desconocida"
+          : calculateAverageRating(spectatorReviews)
+          }}
+        </h4>
+      </div>
+    </div>
+    <div class="col-5">
+      <div class="rounded bg-dark bg-gradient p-4 m-1">
+        <h4>
+          Críticos:
+          {{
+          calculateAverageRating(criticsReviews) == 0
+          ? "Desconocida"
+          : calculateAverageRating(criticsReviews)
+          }}
+        </h4>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-evenly">
+    <div *ngFor="let reviewId of getCriticReviewIds()" class="col-4 text-light">
+      <div class="row rounded bg-dark bg-gradient p-3 m-2">
+        <div class="col-3">
+          <img *ngIf="criticsReviews[reviewId].photoURL" [src]="criticsReviews[reviewId].photoURL"
+            alt="{{ criticsReviews[reviewId].username }}" width="45px" class="rounded-circle" />
+        </div>
+        <div class="col-9">
+          <p>
+            <strong>{{ criticsReviews[reviewId].username }}
+              <span class="badge text-bg-secondary me-1">
+                {{ criticsReviews[reviewId].score }}
+              </span>
+              <span class="badge badge-critic">Círitco</span>
+            </strong>
+            <br />
+            {{ criticsReviews[reviewId].text }}
+          </p>
+        </div>
+        <div class="row justify-content-end">
+          <div class="col-3">
+            <button *ngIf="criticsReviews[reviewId].uid == this.user.uid" class="btn btn-danger"
+              (click)="deleteReview(reviewId)">
+              Borrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let reviewId of getSpectatorReviewIds()" class="col-4 text-light">
+      <div class="row rounded bg-dark bg-gradient p-3 m-2">
+        <div class="col-3">
+          <img *ngIf="spectatorReviews[reviewId].photoURL" [src]="spectatorReviews[reviewId].photoURL"
+            alt="{{ spectatorReviews[reviewId].username }}" width="45px" class="rounded-circle" />
+        </div>
+        <div class="col-9">
+          <p>
+            <strong>{{ spectatorReviews[reviewId].username }}
+              <span class="badge text-bg-secondary me-1">
+                {{ spectatorReviews[reviewId].score }}
+              </span>
+              <span class="badge text-bg-success">Espectador</span>
+            </strong>
+            <br />
+            {{ spectatorReviews[reviewId].text }}
+          </p>
+        </div>
+        <div class="row justify-content-end">
+          <div class="col-3">
+            <button *ngIf="spectatorReviews[reviewId].uid == this.user.uid" class="btn btn-danger"
+              (click)="deleteReview(reviewId)">
+              Borrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

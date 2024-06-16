@@ -20,6 +20,9 @@ import { UserService } from './services/user.service';
 import { environment } from '../environments/environment';
 import { MovieComponent } from './components/pages/movie/movie.component';
 import { ActorComponent } from './components/pages/actor/actor.component';
+import { MovieDetailsComponent } from './components/pages/movie/movie-details/movie-details.component';
+import { MovieReviewsComponent } from './components/pages/movie/movie-reviews/movie-reviews.component';
+import { MovieCastingComponent } from './components/pages/movie/movie-casting/movie-casting.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,10 @@ import { ActorComponent } from './components/pages/actor/actor.component';
     LoginComponent,
     SignupComponent,
     MovieComponent,
-    ActorComponent
+    ActorComponent,
+    MovieDetailsComponent,
+    MovieReviewsComponent,
+    MovieCastingComponent
   ],
   imports: [
     HttpClientModule,
