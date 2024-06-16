@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { BACKEND_URL } from 'src/environments/environment';
+import { VerificationRequest } from '../models/verificationRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +35,69 @@ export class VerificationService {
             } else {
               reject('Unexpected error saving request.')
             }
-          }, error: (_error) => {
-            reject('Error saving request.')
+          }, error: (error) => {
+            reject(error)
+          }
+        })
+      }).catch((_error) => {
+        reject('User not logged in')
+      })
+    })
+  }
+
+  public getRequests(): Promise<VerificationRequest[]> {
+    return new Promise<VerificationRequest[]>((resolve, reject) => {
+      if (!this.auth.currentUser) {
+        return reject('Admin not logged in.')
+      }
+      
+      this.auth.currentUser.getIdToken()
+      .then((idToken) => {
+        const headers: HttpHeaders = new HttpHeaders({
+          'Authorization': 'Bearer ' + idToken
+        });
+
+      this.http.get<VerificationRequest[]>(BACKEND_URL + '/verification', { headers , observe: 'response' })
+        .subscribe({
+          next: (response) => {
+            if (response.body && response.status == 200) {
+              resolve(response.body)
+            } else {
+              reject('Unexpected error getting requests.')
+            }
+          }, error: (error) => {
+            reject(error)
+          }
+        })
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+  }
+
+  public updateRequest(requestID: string, newStatus: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      if (!this.auth.currentUser) {
+        return reject('User not logged in.')
+      }
+      this.auth.currentUser.getIdToken()
+      .then((idToken) => {
+        const headers: HttpHeaders = new HttpHeaders({
+          'Authorization': 'Bearer ' + idToken,
+          'Content-Type': 'application/json '
+        });
+        
+        const body = {requestID, newStatus}
+        this.http.patch<{message: string}>(BACKEND_URL + '/verification', { headers, body, observe: 'response' })
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              resolve(response.message)
+            } else {
+              reject('Unexpected error updating requests.')
+            }
+          }, error: (error) => {
+            reject(error)
           }
         })
       }).catch((_error) => {

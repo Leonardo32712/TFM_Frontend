@@ -30,7 +30,7 @@ export class ReviewsService {
     })
   }
 
-  public postReview(newReview: Review) {
+  public postReview(newReview: Review): Promise<{message: string, reviewId: string}> {
     return new Promise<{message: string, reviewId: string}>((resolve, reject) => {
       if (!this.auth.currentUser) {
         return reject('User not logged in.')

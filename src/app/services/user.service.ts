@@ -47,13 +47,13 @@ export class UserService {
         }
       });
 
-      this.http.post(BACKEND_URL + '/users/signup', formData, { observe: 'response' })
+      this.http.post<{message: string}>(BACKEND_URL + '/users/signup', formData, { observe: 'response' })
         .subscribe({
           next: (response) => {
-            if (response.status == 201) {
-              resolve('Usuario registrado correctamente')
+            if (response.body && response.status == 201) {
+              resolve(response.body.message)
             } else {
-              reject('Error inesperado en el registro de usuario')
+              reject('Unexpected error signing up user.')
             }
           }, error: (error: any) => {
             reject(signUpControllerErrorHandler(error))
@@ -105,20 +105,20 @@ export class UserService {
         const headers = new HttpHeaders({
           'Authorization': 'Bearer ' + idToken
         });
-        this.http.put(BACKEND_URL + '/users/updateData', formData, { headers , observe: 'response' })
+        this.http.put<{message: string}>(BACKEND_URL + '/users/updateData', formData, { headers , observe: 'response' })
         .subscribe({
           next: (response) => {
-            if (response.status == 201) {
-              resolve('Usuario actualizado correctamente')
+            if (response.status == 201 && response.body) {
+              resolve(response.body.message)
             } else {
-              reject('Error inesperado en la actualización de usuario')
+              reject('Unexpected error updating user.')
             }
           }, error: (error) => {
             reject(error)
           }
         })
       }).catch((_error) => {
-        reject('Usuario no autenticado')
+        reject('User not logged in.')
       })
     })
   }
@@ -157,22 +157,22 @@ export class UserService {
           'Authorization': 'Bearer ' + idToken
         });
 
-        this.http.delete<string>(BACKEND_URL + '/users', {
+        this.http.delete<{message: string}>(BACKEND_URL + '/users', {
           headers: headers,
           observe: 'response'
         }).subscribe({
           next: (response) => {
-            if (response.status == 200) {
-              resolve('Su cuenta ha sido eliminada exitosamente.')
+            if (response.status == 200 && response.body) {
+              resolve(response.body.message)
             } else {
-              reject('Error inesperado en la eliminación de su cuenta')
+              reject('Unexpected error deleting your account.')
             }
           }, error: (error) => {
             reject(deleteAccountErrorHandler(error))
           }
         })
       }).catch((_error) => {
-        reject('Usuario no autenticado')
+        reject('User not logged in.')
       })
     })
   }

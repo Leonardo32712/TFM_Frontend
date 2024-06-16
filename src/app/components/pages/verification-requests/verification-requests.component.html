@@ -1,0 +1,37 @@
+<div class="p-5">
+    <section class="ftco-section container bg-dark rounded">
+        <div class="p-5 pt-4">
+            <div class="row">
+                <button class="btn btn-danger mb-3" (click)="getRequests()">Get requests</button>
+                <div *ngFor="let request of requests" class="col-12 bg-secondary bg-gradient m-1">
+                    <div class="row p-3 m-2 justify-content-center">
+                        <div class="col-1">
+                          <img *ngIf="request.user.photoURL" [src]="request.user.photoURL"
+                            alt="{{ request.user.email }}" width="45px" class="rounded-circle" />
+                        </div>
+                        <div class="col-5">
+                            <p class="m-0"><strong>UserID: </strong>{{request.uid}}</p>
+                            <p class="m-0"><strong>Email: </strong>{{request.user.email}}
+                            <strong>Critic: </strong>{{request.user.emailVerified}}</p>
+                            <strong>Request: </strong><p>{{request.text}}</p>
+                        </div>
+                        <div class="col-3">
+                            <button *ngIf="request.status == 'Pending'" class="btn btn-success m-1"
+                                (click)="updateRequest(request.requestID,'Accepted')">
+                                Accept
+                            </button>
+                            <button *ngIf="request.status == 'Pending'" class="btn btn-danger m-1"
+                                (click)="updateRequest(request.requestID,'Denied')">
+                                Denny
+                            </button>
+                            <button *ngIf="request.status == 'Accepted' || request.status == 'Denied'" class="btn btn-secondary m-1"
+                                (click)="updateRequest(request.requestID,'Pending')">
+                                Reopen
+                            </button>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+      </section>
+</div>
