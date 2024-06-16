@@ -16,6 +16,12 @@ export class VerificationRequestsComponent {
   ){}
 
   updateRequest(requestID: string, status: string){
+    const request = this.requests.find(req => req.requestID === requestID);
+    if (request) {
+        request.status = status;
+        this.requests = this.sortRequestsByStatus(this.requests)
+    }
+
     this.verificationService.updateRequest(requestID, status).then((message) => {
       this.response = message
     }).catch((error) => {
@@ -25,9 +31,23 @@ export class VerificationRequestsComponent {
 
   getRequests(){
     this.verificationService.getRequests().then((requests) => {
-      this.requests = requests
+      this.requests = this.sortRequestsByStatus(requests)
     }).catch((error) => {
       this.response = error
     })
   }
+
+  sortRequestsByStatus(requests: VerificationRequest[]): VerificationRequest[] {
+    requests.sort((a, b) => {
+        if (a.status === 'Pending' && b.status !== 'Pending') {
+            return -1;
+        } else if (a.status !== 'Pending' && b.status === 'Pending') {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    return requests;
+}
 }
