@@ -8,29 +8,29 @@
       alt="default poster" width="230px" class="border border-black border-5">
     </div>
     <div class="col-9">
-      <h4>Sinopsis</h4>
+      <h4>Synopsis</h4>
       <p>{{ movie.overview }}</p>
     </div>
   </div>
   <div class="row justify-content-center mb-4">
     <div class="col-6">
-      <h2>Detalles</h2>
+      <h2>Details</h2>
       <ul class="">
         <li>
-          <strong>Fecha de lanzamiento:</strong>
+          <strong>Release date:</strong>
           {{ movie.release_date | date : "dd-MM-yyyy" }}
         </li>
-        <li><strong>Duración:</strong> {{ movie.runtime }} minutos</li>
-        <li><strong>Presupuesto:</strong> {{ movie.budget | currency }}</li>
+        <li><strong>Runtime:</strong> {{ movie.runtime }} minutos</li>
+        <li><strong>Budget:</strong> {{ movie.budget | currency }}</li>
         <li>
-          <strong>Recaudación:</strong> {{ movie.revenue | currency }}
+          <strong>Revenue:</strong> {{ movie.revenue | currency }}
         </li>
-        <li><strong>Estado:</strong> {{ movie.status }}</li>
+        <li><strong>Status:</strong> {{ movie.status }}</li>
       </ul>
     </div>
     <div class="col-6">
       <div class="row">
-        <h2>Géneros</h2>
+        <h2>Genre</h2>
         <div class="col-4" *ngFor="let genre of movie.genres">
           <div class="rounded bg-light-subtle m-1 p-2 text-dark text-center fw-semibold">
             {{ genre.name }}

@@ -17,6 +17,7 @@ export class MovieReviewsComponent {
   public criticsReviews: Record<string, Review> = {} as Record<string, Review>;
   public spectatorReviews: Record<string, Review> = {} as Record<string, Review>;
   public user: userProfile = {} as userProfile;
+  public hasPostedReview: boolean = false;
 
   constructor(
     private reviewsService: ReviewsService,
@@ -53,9 +54,11 @@ export class MovieReviewsComponent {
     const sortedReviews = Object.entries(reviews).sort(
       ([_keyA, reviewA], [_keyB, reviewB]) => {
         if (reviewA.uid === targetUid && reviewB.uid !== targetUid) {
+          this.hasPostedReview = true;
           return -1;
         }
         if (reviewA.uid !== targetUid && reviewB.uid === targetUid) {
+          this.hasPostedReview = true;
           return 1;
         }
         return 0;
@@ -88,14 +91,14 @@ export class MovieReviewsComponent {
   openReviewEditor() {
     if (!this.user.uid) {
       Swal.fire({
-        title: '¿Quién eres?',
-        text: 'Para publicar una reseña debes iniciar sesión primero.',
+        title: 'Who are you?',
+        text: 'To post a review, you must log in first.',
         showCancelButton: true,
         showConfirmButton: true,
-        confirmButtonText: 'Iniciar sesión',
-        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Log in',
+        cancelButtonText: 'Cancel',
         footer:
-          '¿No tienes una cuenta? Prueba a <a href="/register">Registrarse</a>',
+          "Don't have an account? Try <a href='/register'>Registering</a>",
       }).then((result) => {
         if (result.isConfirmed) {
           this.router.navigate(['/login']);
@@ -105,7 +108,7 @@ export class MovieReviewsComponent {
       this.http.get('assets/reviewEditor.html', { responseType: 'text' })
       .subscribe((html) => {
         Swal.fire({
-          title: 'Por favor, introduce tu puntuación y reseña:',
+          title: 'Please enter your rating and review:',
           html,
           showCancelButton: true,
           preConfirm: this.preConfirmPostReview,
@@ -113,8 +116,8 @@ export class MovieReviewsComponent {
           if (reviewResult.isConfirmed) {
             const { score, text } = reviewResult.value;
             Swal.fire({
-              title: 'Publicando reseña...',
-              text: 'Por favor espere.',
+              title: 'Posting review...',
+              text: 'Please wait.',
               allowOutsideClick: false,
               didOpen: () => {
                 Swal.showLoading();
@@ -133,11 +136,11 @@ export class MovieReviewsComponent {
     const score = scoreElement ? parseInt(scoreElement.value) : null;
     const text = reviewElement ? reviewElement.value : null;
     if (!score) {
-      Swal.showValidationMessage('La puntuación debe estar entre 1 y 5.');
+      Swal.showValidationMessage('The rating must be between 1 and 5.');
       return false;
     }
     if (!text) {
-      Swal.showValidationMessage('La reseña no puede estar vacía.');
+      Swal.showValidationMessage('The review cannot be empty.');
       return false;
     }
     return { score, text };
@@ -154,7 +157,7 @@ export class MovieReviewsComponent {
     };
     this.reviewsService.postReview(newReview).then((response) => {
       Swal.fire({
-        title: 'Reseña publicada',
+        title: 'Review posted!',
         text: response.message,
         icon: 'success',
         showCloseButton: true,
@@ -183,19 +186,19 @@ export class MovieReviewsComponent {
 
   deleteReview(reviewId: string) {
     Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'No podrás revertir esta acción.',
+      title: 'Are you sure?',
+      text: 'You will not be able to revert this action.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
     }).then((result) => {
       if (result.isConfirmed) {
         this.reviewsService.deleteReview(reviewId, parseInt(this.movieId))
         .then((response) => {
           Swal.fire({
-            title: 'Reseña eliminada',
+            title: 'Review deleted!',
             text: response,
             icon: 'success',
             showCloseButton: true

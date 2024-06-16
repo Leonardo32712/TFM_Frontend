@@ -25,8 +25,8 @@ export class LoginComponent {
 
   public loginEmailAndPassword() {
     Swal.fire({
-      title: 'Iniciando sesión...',
-      text: 'Por favor espere.',
+      title: 'Logging in...',
+      text: 'Please wait.',
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
@@ -35,7 +35,7 @@ export class LoginComponent {
     this.userService.logInEmailAndPassword(this.email, this.password)
       .then((message) => {
         Swal.fire({
-          title: 'Sesión iniciada',
+          title: 'Logged in!',
           icon: 'success',
           text: message,
           showCloseButton: true
@@ -44,7 +44,7 @@ export class LoginComponent {
         })
       }).catch((error) => {
         Swal.fire({
-          title: 'Sesión no iniciada',
+          title: 'Not logged in.',
           text: error,
           icon: 'error',
           showCloseButton: true

@@ -17,7 +17,7 @@ export class ActorService {
   public getCasting(movieId: string): Promise<Actor[]> {
     return new Promise<Actor[]>((resolve, reject) => {
       const params = new HttpParams().set('movie_id', movieId)
-      return this.http.get<Actor[]>(BACKEND_URL + '/movies/credits', { params, observe: 'response' })
+      return this.http.get<Actor[]>(BACKEND_URL + '/actors/casting', { params, observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.body && response.status == 200) {
@@ -35,7 +35,7 @@ export class ActorService {
   public getActor(actorId: string): Promise<ActorProfile> {
     return new Promise<ActorProfile>((resolve, reject) => {
       const params = new HttpParams().set('actor_id', actorId)
-      return this.http.get<ActorProfile>(BACKEND_URL + '/movies/actor', { params, observe: 'response' }).subscribe({
+      return this.http.get<ActorProfile>(BACKEND_URL + '/actors', { params, observe: 'response' }).subscribe({
         next: (response) => {
           if (response.body && response.status == 200) {
             resolve(response.body)
@@ -52,7 +52,7 @@ export class ActorService {
   public getMoviesByActor(actorId: string): Promise<MoviePoster[]> {
     return new Promise<MoviePoster[]>((resolve, reject) => {
       const params = new HttpParams().set('actor_id', actorId)
-      return this.http.get<MoviePoster[]>(BACKEND_URL + '/movies/by-actor', { params, observe: 'response' }).subscribe({
+      return this.http.get<MoviePoster[]>(BACKEND_URL + '/actors/movies', { params, observe: 'response' }).subscribe({
         next: (response) => {
           if (response.body && response.status == 200) {
             resolve(response.body)

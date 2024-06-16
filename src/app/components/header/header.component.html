@@ -10,18 +10,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav me-auto mb-2 mb-lg-0">
                 <div class="d-flex" role="search">
-                    <input [(ngModel)]="query" id="query" class="form-control" placeholder="Título de película" aria-label="Search" (keydown)="handleKeyDown($event)">
+                    <input [(ngModel)]="query" id="query" class="form-control" placeholder="Movie title" aria-label="Search" (keydown)="handleKeyDown($event)">
                     <button class="btn btn-danger ms-3" (click)="search()">
                       <img src="/assets/magnifying-glass.png" alt="search icon">
                     </button>
                 </div>
             </div>
-            <a *ngIf="!this.userLogged && !showButtons" class="btn btn-danger m-1" href="/home" (onClick)="showButtons = true">Página principal</a>
-            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/login" (onClick)="showButtons = false">Iniciar sesión</a>
-            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/signup" (onClick)="showButtons = false">Registro</a>
+            <a *ngIf="!this.userLogged && !showButtons" class="btn btn-danger m-1" href="/home" (onClick)="showButtons = true">Home page</a>
+            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/login" (onClick)="showButtons = false">LogIn</a>
+            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/signup" (onClick)="showButtons = false">SignUp</a>
             <a *ngIf="this.userLogged" class="btn btn-danger m-1 user-info" href="/profile">
                 <img src="{{this.user.photoURL}}" alt="User Image" class="user-image">
-                Perfil
+                Profile
             </a>
       </div>
     </div>

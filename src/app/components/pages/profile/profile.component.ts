@@ -60,27 +60,27 @@ export class ProfileComponent {
   updateProfile() {
     if(!this.thereAreChanges()) {
       Swal.fire({
-        title: 'Nada nuevo',
-        text: 'No ha realizado ningún cambio en su perfil',
+        title: 'Nothing new',
+        text: 'There are no changes in user profile.',
         icon: 'info',
         showCloseButton: true
       })
     } else {
       Swal.fire({
-        title: 'Confirmar actualización',
+        title: 'Confirm changes',
         html: `
-          <p><strong>¡Importante!</strong> Si cambias el correo se cerrará la sesión</p>
-          <p><strong>Email anterior:</strong> ${this.userProfile.email} <br>
-          <strong>Email nuevo:</strong> ${this.editedUserProfile.email}</p>
-          <p><strong>Nombre anterior:</strong> ${this.userProfile.displayName} <br>
-          <strong>Nombre nuevo:</strong> ${this.editedUserProfile.displayName}</p>
-          <p><strong>Foto anterior:</strong> ${this.userProfile.photoURL}<br>
-          <strong>Foto nueva:</strong> ${this.uploadedFile ? this.uploadedFile.name : 'Ningún archivo subido'}</p>
+          <p><strong>Important!</strong> If you change the email, the session will be closed.</p>
+          <p><strong>Previous email:</strong> ${this.userProfile.email} <br>
+          <strong>New email:</strong> ${this.editedUserProfile.email}</p>
+          <p><strong>Previous username:</strong> ${this.userProfile.displayName} <br>
+          <strong>New username:</strong> ${this.editedUserProfile.displayName}</p>
+          <p><strong>Previous photo URL:</strong> ${this.userProfile.photoURL}<br>
+          <strong>New photo file name:</strong> ${this.uploadedFile ? this.uploadedFile.name : 'No file uploaded'}</p>
         `,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Sí, actualizar',
-        cancelButtonText: 'Cancelar'
+        confirmButtonText: 'Yes, confirm changes',
+        cancelButtonText: 'Cancel'
       }).then((result) => {
         if (result.isConfirmed) {
           if (this.uploadedFile) {
@@ -88,7 +88,7 @@ export class ProfileComponent {
           }
           this.userService.updateUserData(this.editedUserProfile).then((response) => {
             Swal.fire({
-              title: 'Perfil actualizado',
+              title: 'Profile updated',
               text: response,
               icon: 'success',
               showCloseButton: true
@@ -117,7 +117,7 @@ export class ProfileComponent {
           input: 'textarea',
           preConfirm: (text: string) => {
             if (!text) {
-              Swal.showValidationMessage('La reseña no puede estar vacía.');
+              Swal.showValidationMessage('Request must not be empty.');
               return false;
             } else {
               return text;
@@ -128,13 +128,13 @@ export class ProfileComponent {
           .then((message) => {
             Swal.fire({
               icon: 'success',
-              title:  'Solicitud almacenada correctamente',
+              title:  'Request saved!',
               text: message
             })
           }).catch((error) => {
             Swal.fire({
               icon: 'error',
-              title: 'Error almacenando su solicitud',
+              title: 'Error saving your request',
               text: error
             })
           })
@@ -144,17 +144,17 @@ export class ProfileComponent {
 
   deleteAccount() {
     Swal.fire({
-      title: 'Advertencia',
-      text: 'Al eliminar su cuenta se borrarán sus datos y las reseñas que haya publicado. ¿Está seguro de que quiere eliminarla?',
+      title: 'Warning',
+      text: 'Deleting your account will erase your data and any reviews you have posted. Are you sure you want to delete it?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonText: 'Yes, delete it',
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: 'Eliminando cuenta...',
-          text: 'Por favor espere.',
+          title: 'Deoleting account...',
+          text: 'please wait.',
           allowOutsideClick: false,
           didOpen: () => {
             Swal.showLoading();
@@ -162,7 +162,7 @@ export class ProfileComponent {
         });
         this.userService.deleteAccount().then((message) => {
           Swal.fire({
-            title: 'Cuenta eliminada',
+            title: 'Account deleted',
             text: message,
             icon: 'success',
             showCloseButton: true

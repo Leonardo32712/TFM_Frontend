@@ -1,10 +1,10 @@
 <div class="row justify-content-between">
     <div class="col-2">
-      <h2 class="mb-3">Reseñas</h2>
+      <h2 class="mb-3">Reviews</h2>
     </div>
     <div class="col-3 text-end">
       <button class="btn btn-danger fs-5 fw-semibold" (click)="openReviewEditor()">
-        Publicar Reseña
+        Post review
       </button>
     </div>
   </div>
@@ -12,10 +12,10 @@
     <div class="col-5">
       <div class="rounded bg-dark bg-gradient p-4 m-1">
         <h4>
-          Espectadores:
+          Spectators:
           {{
           calculateAverageRating(spectatorReviews) == 0
-          ? "Desconocida"
+          ? "Unknown"
           : calculateAverageRating(spectatorReviews)
           }}
         </h4>
@@ -24,10 +24,10 @@
     <div class="col-5">
       <div class="rounded bg-dark bg-gradient p-4 m-1">
         <h4>
-          Críticos:
+          Critics:
           {{
           calculateAverageRating(criticsReviews) == 0
-          ? "Desconocida"
+          ? "Unknown"
           : calculateAverageRating(criticsReviews)
           }}
         </h4>
@@ -47,7 +47,7 @@
               <span class="badge text-bg-secondary me-1">
                 {{ criticsReviews[reviewId].score }}
               </span>
-              <span class="badge badge-critic">Círitco</span>
+              <span class="badge badge-critic">Critic</span>
             </strong>
             <br />
             {{ criticsReviews[reviewId].text }}
@@ -57,7 +57,7 @@
           <div class="col-3">
             <button *ngIf="criticsReviews[reviewId].uid == this.user.uid" class="btn btn-danger"
               (click)="deleteReview(reviewId)">
-              Borrar
+              Delete
             </button>
           </div>
         </div>
@@ -75,7 +75,7 @@
               <span class="badge text-bg-secondary me-1">
                 {{ spectatorReviews[reviewId].score }}
               </span>
-              <span class="badge text-bg-success">Espectador</span>
+              <span class="badge text-bg-success">Spectator</span>
             </strong>
             <br />
             {{ spectatorReviews[reviewId].text }}
@@ -85,7 +85,7 @@
           <div class="col-3">
             <button *ngIf="spectatorReviews[reviewId].uid == this.user.uid" class="btn btn-danger"
               (click)="deleteReview(reviewId)">
-              Borrar
+              Delete
             </button>
           </div>
         </div>

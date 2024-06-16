@@ -38,7 +38,7 @@ export class SignupComponent {
     if (!this.username || !this.email || !this.password || !this.confirmPassword) {
       Swal.fire({
         title: 'Error', 
-        text: 'Todos los campos son obligatorios', 
+        text: 'Except profile picture, all fields must be fulfilled.', 
         icon: 'error',
         showCloseButton: true
       });
@@ -48,7 +48,7 @@ export class SignupComponent {
     if (this.password !== this.confirmPassword) {
       Swal.fire({
         title: 'Error', 
-        text: 'Las contraseñas no coinciden', 
+        text: 'Paswords do not match.', 
         icon: 'error',
         showCloseButton: true
       });
@@ -63,8 +63,8 @@ export class SignupComponent {
     }
 
     Swal.fire({
-      title: 'Registrando cuenta...',
-      text: 'Por favor espere.',
+      title: 'Registering account...',
+      text: 'Please wait.',
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
@@ -73,7 +73,7 @@ export class SignupComponent {
     this.userService.signUp(userRegister)
       .then((message) => {
         Swal.fire({
-          title: 'Registro completado', 
+          title: 'Signed up!', 
           text: message, 
           icon: 'success',
           showCloseButton: true

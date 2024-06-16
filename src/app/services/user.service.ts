@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
-import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "../controllers/auth.controller.error"
+// import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "../controllers/auth.controller.error"
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { userProfile } from '../models/user/userProfile';
 import { BACKEND_URL } from "src/environments/environment"
@@ -21,8 +21,8 @@ export class UserService {
             localStorage.setItem('idtoken', idtoken) ///////////////////////////
           })
           resolve('Sesión iniciada correctamente.')
-        }).catch((error: any) => {
-          reject(logInControllerErrorHandler(error))
+        }).catch((error) => {
+          reject(error)
         })
     })
   }
@@ -55,8 +55,8 @@ export class UserService {
             } else {
               reject('Unexpected error signing up user.')
             }
-          }, error: (error: any) => {
-            reject(signUpControllerErrorHandler(error))
+          }, error: (error) => {
+            reject(error)
           }
         })
     });
@@ -168,7 +168,7 @@ export class UserService {
               reject('Unexpected error deleting your account.')
             }
           }, error: (error) => {
-            reject(deleteAccountErrorHandler(error))
+            reject(error)
           }
         })
       }).catch((_error) => {

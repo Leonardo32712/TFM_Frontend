@@ -1,6 +1,6 @@
 <div class="container rounded bg-dark mt-5 text-white">
     <div class="text-center pt-5">
-        <h1 class="text-right">Perfil de usuario</h1>
+        <h1 class="text-right">User profile</h1>
     </div>
     <div class="row">
         <div class="col-md-1"></div>
@@ -14,48 +14,48 @@
             <div class="p-3">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="labels">Nombre de usuario</h5>
+                        <h5 class="labels">Username</h5>
                         <input type="text" class="form-control" [(ngModel)]="this.editedUserProfile.displayName"
                             [disabled]="this.readMode" />
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-12">
-                        <h5 class="labels">Correo electrónico</h5>
+                        <h5 class="labels">Email</h5>
                         <input type="text" class="form-control" [(ngModel)]="this.editedUserProfile.email"
                             [disabled]="this.readMode" />
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-12">
-                        <h5 class="labels">Rol</h5>
-                        <input type="text" class="form-control" [value]="userProfile.emailVerified ? 'Crítico' : 'Espectador'" disabled>
+                        <h5 class="labels">Role</h5>
+                        <input type="text" class="form-control" [value]="userProfile.emailVerified ? 'Critic' : 'Spectator'" disabled>
                     </div>                    
                 </div>
             </div>
         </div>
         <div class="m-5 text-center">
-            <p *ngIf="uploadedFile">Imagen subida: {{uploadedFile.name}}</p>
+            <p *ngIf="uploadedFile">Uploaded file: {{uploadedFile.name}}</p>
             <button *ngIf="readMode" class="btn btn-danger m-1" (click)="changeMode()">
-                Editar perfil
+                Edit profile
             </button>
             <button *ngIf="!readMode" class="btn btn-danger m-1" (click)="changeMode()">
-                Cancelar
+                Cancel
             </button>
             <button *ngIf="!readMode" class="btn btn-danger m-1" (click)="fileInput.click(); onFileSelected($event)">
-                Cambiar foto
+                Change photo
             </button>
             <button *ngIf="!readMode" class="btn btn-danger m-1" (click)="updateProfile()">
-                Guardar cambios
+                Save changes
             </button>
             <button *ngIf="readMode" class="btn btn-danger m-1" (click)="requestVerification()">
-                Solicitar verificación
+                Request verification
             </button>
             <button *ngIf="readMode" class="btn btn-danger m-1" (click)="deleteAccount()">
-                Eliminar cuenta
+                Delete account
             </button>
             <button *ngIf="readMode" class="btn btn-danger m-1" (click)="logOut()">
-                Cerrar sesión
+                LogOut
             </button>
         </div>
         <div class="col-md-1"></div>

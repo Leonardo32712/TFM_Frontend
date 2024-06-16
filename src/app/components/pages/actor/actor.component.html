@@ -11,29 +11,28 @@
                     alt="default poster" width="230px" class="border border-black border-5">
                 </div>
                 <div class="col-9">
-                    <h4>Biografía</h4>
+                    <h4>Biografy</h4>
                     <p>{{ profile.biography }}</p>
                 </div>
             </div>
             <div class="row mb-5">
                 <div class="col-6">
-                    <h2>Información</h2>
+                    <h2>Information</h2>
                     <ul class="">
-                        <li><strong>Fecha de nacimiento:</strong> {{ profile.birthday| date: 'dd-MM-yyyy' }}</li>
-                        <li *ngIf="profile.deathday"><strong>Fecha de muerte:</strong> {{ profile.deathday | date:
-                            'dd-MM-yyyy' }}</li>
-                        <li><strong>Género:</strong> {{ profile.gender }}</li>
-                        <li><strong>Ocupación:</strong> {{ profile.known_for_department }}</li>
-                        <li><strong>Lugar de nacimiento:</strong> {{ profile.place_of_birth }}</li>
+                        <li><strong>Birthday:</strong> {{ profile.birthday| date: 'dd-MM-yyyy' }}</li>
+                        <li *ngIf="profile.deathday"><strong>Deathday:</strong> {{ profile.deathday | date:'dd-MM-yyyy' }}</li>
+                        <li><strong>Gender:</strong> {{ profile.gender }}</li>
+                        <li><strong>Occupation:</strong> {{ profile.known_for_department }}</li>
+                        <li><strong>Place of birth:</strong> {{ profile.place_of_birth }}</li>
                     </ul>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="container">
-                        <h2>Películas</h2>
+                        <h2>Movies</h2>
                         <div class="row m-3 flex-nowrap overflow-auto">
-                          <div class="bg-dark pt-3 pb-4 m-1 col-3 text-white text-center fw-semibold" 
+                          <div class="bg-dark pt-3 m-1 col-3 text-white text-center fw-semibold" 
                           *ngFor="let movie of this.movies">
                             <a [href]="'/movie?id=' + movie.id" class="link-light link-underline link-underline-opacity-0">
                               <img *ngIf="movie.poster_path" [src]="movie.poster_path" [alt]="movie.title + ' poster'" width="200px" class="border border-2 border-black">

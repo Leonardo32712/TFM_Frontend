@@ -1,5 +1,5 @@
 <div class="container">
-    <h2>Actores</h2>
+    <h2>Casting</h2>
     <div class="row m-3 flex-nowrap overflow-auto pb-3">
       <div class="bg-dark bg-gradient pt-4 m-1 col-3 text-white text-center fw-semibold"
         *ngFor="let actor of casting">
@@ -8,12 +8,12 @@
             class="border border-2 border-black" />
           <img *ngIf="!actor.profile_path" src="/assets/defaultImage.png" alt="default poster" width="140px"
             class="border border-2 border-black" />
-          <p class="m-0 mt-3"><strong>Nombre:</strong> {{ actor.name }}</p>
+          <p class="m-0 mt-3"><strong>Name:</strong> {{ actor.name }}</p>
           <p class="m-0">
-            <strong>Ocupación:</strong> {{ actor.known_for_department }}
+            <strong>Occupation:</strong> {{ actor.known_for_department }}
           </p>
           <p class="m-0">
-            <strong>Personaje:</strong> {{ actor.character }}
+            <strong>Character:</strong> {{ actor.character }}
           </p>
         </a>
       </div>
