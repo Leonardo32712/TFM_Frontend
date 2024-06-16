@@ -7,6 +7,7 @@ import { SignupComponent } from './components/pages/signup/signup.component';
 import { ProfileComponent } from './components/pages/profile/profile.component';
 import { MovieComponent } from './components/pages/movie/movie.component';
 import { ActorComponent } from './components/pages/actor/actor.component';
+import { VerificationRequestsComponent } from './components/pages/verification-requests/verification-requests.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent},
   { path: 'profile', component: ProfileComponent},
   { path: 'movie', component: MovieComponent},
-  { path: 'actor', component: ActorComponent }
+  { path: 'actor', component: ActorComponent },  
+  { path: 'verification-requests', component: VerificationRequestsComponent }
 ];
 
 @NgModule({

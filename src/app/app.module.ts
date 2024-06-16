@@ -23,6 +23,7 @@ import { ActorComponent } from './components/pages/actor/actor.component';
 import { MovieDetailsComponent } from './components/pages/movie/movie-details/movie-details.component';
 import { MovieReviewsComponent } from './components/pages/movie/movie-reviews/movie-reviews.component';
 import { MovieCastingComponent } from './components/pages/movie/movie-casting/movie-casting.component';
+import { VerificationRequestsComponent } from './components/pages/verification-requests/verification-requests.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { MovieCastingComponent } from './components/pages/movie/movie-casting/mo
     ActorComponent,
     MovieDetailsComponent,
     MovieReviewsComponent,
-    MovieCastingComponent
+    MovieCastingComponent,
+    VerificationRequestsComponent
   ],
   imports: [
     HttpClientModule,

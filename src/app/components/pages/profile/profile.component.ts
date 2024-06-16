@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { userProfile } from 'src/app/models/user/userProfile';
 import { userUpdate } from 'src/app/models/user/userUpdate';
 import { UserService } from 'src/app/services/user.service';
+import { VerificationService } from 'src/app/services/verification.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,7 +18,12 @@ export class ProfileComponent {
   uploadedFile: File | null = null;
   readMode: boolean = true;
 
-  constructor(private userService: UserService, private router: Router, private http: HttpClient){}
+  constructor(
+    private userService: UserService, 
+    private verificationService: VerificationService,
+    private router: Router, 
+    private http: HttpClient
+  ){}
 
   ngOnInit(){
     this.userService.getUserProfile()
@@ -118,7 +124,7 @@ export class ProfileComponent {
             }
           }
         }).then((text) => {
-          this.userService.requestVerification(text.value)
+          this.verificationService.requestVerification(text.value)
           .then((message) => {
             Swal.fire({
               icon: 'success',
