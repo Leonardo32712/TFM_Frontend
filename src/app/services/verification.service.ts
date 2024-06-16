@@ -23,7 +23,7 @@ export class VerificationService {
       .then((idToken) => {
         const headers: HttpHeaders = new HttpHeaders({
           'Authorization': 'Bearer ' + idToken,
-          'Content-Type': 'application/json '
+          'Content-Type': 'application/json'
         });
 
         const body = {text: requestText}
@@ -75,24 +75,25 @@ export class VerificationService {
     })
   }
 
-  public updateRequest(requestID: string, newStatus: string): Promise<string> {
+  public updateRequestStatus(requestID: string, newStatus: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       if (!this.auth.currentUser) {
-        return reject('User not logged in.')
+        return reject('Admin not logged in.')
       }
+
       this.auth.currentUser.getIdToken()
       .then((idToken) => {
         const headers: HttpHeaders = new HttpHeaders({
           'Authorization': 'Bearer ' + idToken,
-          'Content-Type': 'application/json '
+          'Content-Type': 'application/json'
         });
         
         const body = {requestID, newStatus}
-        this.http.patch<{message: string}>(BACKEND_URL + '/verification', { headers, body, observe: 'response' })
+        this.http.patch<{message: string}>(BACKEND_URL + '/verification', body, { headers, observe: 'response' })
         .subscribe({
           next: (response) => {
-            if (response) {
-              resolve(response.message)
+            if (response.body) {
+              resolve(response.body.message)
             } else {
               reject('Unexpected error updating requests.')
             }
@@ -101,7 +102,7 @@ export class VerificationService {
           }
         })
       }).catch((_error) => {
-        reject('User not logged in')
+        reject('Admin not logged in')
       })
     })
   }

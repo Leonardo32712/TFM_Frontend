@@ -16,15 +16,15 @@
                     <div class="col-3">
                         <p class="m-0 ms-1"><strong>Status: </strong>{{request.status}}</p>
                         <button *ngIf="request.status == 'Pending'" class="btn btn-success m-1"
-                            (click)="updateRequest(request.requestID,'Accepted')">
+                            (click)="updateRequestStatus(request.requestID,'Approved')">
                             Accept
                         </button>
                         <button *ngIf="request.status == 'Pending'" class="btn btn-danger m-1"
-                            (click)="updateRequest(request.requestID,'Denied')">
+                            (click)="updateRequestStatus(request.requestID,'Denied')">
                             Denny
                         </button>
-                        <button *ngIf="request.status == 'Accepted' || request.status == 'Denied'" class="btn btn-secondary m-1"
-                            (click)="updateRequest(request.requestID,'Pending')">
+                        <button *ngIf="request.status == 'Approved' || request.status == 'Denied'" class="btn btn-secondary m-1"
+                            (click)="updateRequestStatus(request.requestID,'Pending')">
                             Reopen
                         </button>     
                     </div>

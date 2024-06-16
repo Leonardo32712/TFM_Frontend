@@ -9,23 +9,20 @@ import { VerificationService } from 'src/app/services/verification.service';
 })
 export class VerificationRequestsComponent {
   public requests: VerificationRequest[] = []
-  public response: string = 'Wating for responses...'
 
   constructor(
     private verificationService: VerificationService
   ){}
 
-  updateRequest(requestID: string, status: string){
-    const request = this.requests.find(req => req.requestID === requestID);
-    if (request) {
-        request.status = status;
-        this.requests = this.sortRequestsByStatus(this.requests)
-    }
-
-    this.verificationService.updateRequest(requestID, status).then((message) => {
-      this.response = message
+  updateRequestStatus(requestID: string, status: string){
+    this.verificationService.updateRequestStatus(requestID, status).then((_message) => {
+      const request = this.requests.find(req => req.requestID === requestID);
+      if (request) {
+          request.status = status;
+          this.requests = this.sortRequestsByStatus(this.requests)
+      }
     }).catch((error) => {
-      this.response = error
+      console.log(error)
     })
   }
 
@@ -33,7 +30,7 @@ export class VerificationRequestsComponent {
     this.verificationService.getRequests().then((requests) => {
       this.requests = this.sortRequestsByStatus(requests)
     }).catch((error) => {
-      this.response = error
+      console.log(error)
     })
   }
 
