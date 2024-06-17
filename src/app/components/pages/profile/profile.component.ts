@@ -74,7 +74,7 @@ export class ProfileComponent {
       Swal.fire({
         title: 'Confirm changes',
         html: `
-          <p><strong>Important!</strong> If you change the email, the session will be closed.</p>
+          <p><strong>Important!</strong> Any changes made will log you out.</p>
           <p><strong>Previous email:</strong> ${this.userProfile.email} <br>
           <strong>New email:</strong> ${this.editedUserProfile.email}</p>
           <p><strong>Previous username:</strong> ${this.userProfile.displayName} <br>
@@ -98,7 +98,7 @@ export class ProfileComponent {
               icon: 'success',
               showCloseButton: true
             }).then(() => {
-              window.location.reload()
+              this.userService.logOut()
             });
           }).catch((error: string) => {
             Swal.fire({
