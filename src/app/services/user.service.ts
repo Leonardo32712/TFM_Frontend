@@ -3,7 +3,7 @@ import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { userProfile } from '../models/user/userProfile';
 import { userUpdate } from '../models/user/userUpdate';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'

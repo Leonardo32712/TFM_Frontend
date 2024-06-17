@@ -3,7 +3,7 @@ import { Actor } from '../models/actor/actor';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActorProfile } from '../models/actor/actorProfile';
 import { MoviePoster } from '../models/movie/moviePoster';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'

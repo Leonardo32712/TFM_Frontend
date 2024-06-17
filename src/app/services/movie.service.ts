@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { MoviePoster } from '../models/movie/moviePoster';
 import { CarouselMovie } from "../models/movie/carouselMovie"
 import { Movie } from "../models/movie/movie"
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'

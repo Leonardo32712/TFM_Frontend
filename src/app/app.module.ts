@@ -17,7 +17,7 @@ import { LoginComponent } from './components/pages/login/login.component';
 import { SignupComponent } from './components/pages/signup/signup.component';
 import { UserService } from './services/user.service';
 
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.prod';
 import { MovieComponent } from './components/pages/movie/movie.component';
 import { ActorComponent } from './components/pages/actor/actor.component';
 import { MovieDetailsComponent } from './components/pages/movie/movie-details/movie-details.component';
