@@ -2,8 +2,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Review } from '../models/review/review';
-import { BACKEND_URL } from "src/environments/environment";
 import { AllReviews } from '../models/review/allReviews';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class ReviewsService {
   public getReviews(movieId: string): Promise<AllReviews> {
     const params = new HttpParams().set('movie_id', movieId)
     return new Promise<AllReviews>((resolve, reject) => {
-      this.http.get<AllReviews>(BACKEND_URL + '/reviews', { params, observe: 'response' })
+      this.http.get<AllReviews>(environment.backendURL + '/reviews', { params, observe: 'response' })
       .subscribe({
         next: (response) => {
           if(response.body){
@@ -58,7 +58,7 @@ export class ReviewsService {
         });
 
         this.http.post<{message: string, reviewId: string}>
-        (BACKEND_URL + '/reviews', body, { params, headers, observe: 'response' })
+        (environment.backendURL + '/reviews', body, { params, headers, observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.status == 201 && response.body) {
@@ -91,7 +91,7 @@ export class ReviewsService {
           .set('review_id', reviewId)
   
         this.http.delete<{ message: string }>
-        (BACKEND_URL + '/reviews', { headers, params, observe: 'response' })
+        (environment.backendURL + '/reviews', { headers, params, observe: 'response' })
         .subscribe({
           next: (response) => {
             if(response.body && response.status == 200){

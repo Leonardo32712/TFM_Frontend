@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { BACKEND_URL } from 'src/environments/environment';
 import { VerificationRequest } from '../models/verificationRequest';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class VerificationService {
         });
 
         const body = {text: requestText}
-        this.http.post<{message: string}>(BACKEND_URL + '/users/verification', body, { headers , observe: 'response' })
+        this.http.post<{message: string}>(environment.backendURL + '/users/verification', body, { headers , observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.status == 201) {
@@ -57,7 +57,7 @@ export class VerificationService {
           'Authorization': 'Bearer ' + idToken
         });
 
-      this.http.get<VerificationRequest[]>(BACKEND_URL + '/verification', { headers , observe: 'response' })
+      this.http.get<VerificationRequest[]>(environment.backendURL + '/verification', { headers , observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.body && response.status == 200) {
@@ -89,7 +89,7 @@ export class VerificationService {
         });
         
         const body = {requestID, newStatus}
-        this.http.patch<{message: string}>(BACKEND_URL + '/verification', body, { headers, observe: 'response' })
+        this.http.patch<{message: string}>(environment.backendURL + '/verification', body, { headers, observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.body) {

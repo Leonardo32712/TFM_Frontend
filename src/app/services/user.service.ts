@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
-// import { deleteAccountErrorHandler, logInControllerErrorHandler, signUpControllerErrorHandler } from "../controllers/auth.controller.error"
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { userProfile } from '../models/user/userProfile';
-import { BACKEND_URL } from "src/environments/environment"
 import { userUpdate } from '../models/user/userUpdate';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +15,7 @@ export class UserService {
   public logInEmailAndPassword(email: string, password: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       signInWithEmailAndPassword(this.auth, email, password)
-        .then((userCredentials) => {
-          userCredentials.user.getIdToken().then((idtoken) => {
-            localStorage.setItem('idtoken', idtoken) ///////////////////////////
-          })
+        .then((_userCredentials) => {
           resolve('Sesión iniciada correctamente.')
         }).catch((error) => {
           reject(error)
@@ -47,7 +43,7 @@ export class UserService {
         }
       });
 
-      this.http.post<{message: string}>(BACKEND_URL + '/users/signup', formData, { observe: 'response' })
+      this.http.post<{message: string}>(environment.backendURL + '/users/signup', formData, { observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.body && response.status == 201) {
@@ -105,7 +101,7 @@ export class UserService {
         const headers = new HttpHeaders({
           'Authorization': 'Bearer ' + idToken
         });
-        this.http.put<{message: string}>(BACKEND_URL + '/users/updateData', formData, { headers , observe: 'response' })
+        this.http.put<{message: string}>(environment.backendURL + '/users/updateData', formData, { headers , observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.status == 201 && response.body) {
@@ -157,7 +153,7 @@ export class UserService {
           'Authorization': 'Bearer ' + idToken
         });
 
-        this.http.delete<{message: string}>(BACKEND_URL + '/users', {
+        this.http.delete<{message: string}>(environment.backendURL + '/users', {
           headers: headers,
           observe: 'response'
         }).subscribe({
