@@ -35,7 +35,7 @@
     <div *ngFor="let movie of list" class="movie-card">
       <a [href]="'/movie?id=' + movie.id">
         <img *ngIf="movie.poster_path" [src]="movie.poster_path" class="movie-poster" [alt]="movie.title + ' poster'">
-        <img *ngIf="!movie.poster_path" src="./assets/defaultImage.png" class="movie-poster" alt="default poster">
+        <img *ngIf="!movie.poster_path" src='assets/defaultImage.png' class="movie-poster" alt="default poster">
       </a>      
     </div>
   </div>
