@@ -48,12 +48,12 @@ export class HeaderComponent {
 
   search() {
     this.showButtons = true
-    localStorage.setItem('q', this.query)
-    if (this.router.url === '/search') {
-      window.location.reload();
-    } else {
-      this.router.navigate(['/search']);
-    }
+    const q = this.query.replace(/[^0-9 a-z]/gi, '')
+    this.router.navigate(['/search'], { queryParams: { q } });
+    // if (this.router.url === '/search') {
+    //   this.ngOnInit()
+    // } else {
+    // }
   }
 
   navigateLogIn(){

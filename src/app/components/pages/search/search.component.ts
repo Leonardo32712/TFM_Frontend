@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MoviePoster } from 'src/app/models/movie/moviePoster';
 import { MovieService } from 'src/app/services/movie.service';
 
@@ -15,15 +15,17 @@ export class SearchComponent {
 
   constructor(
     private movieService: MovieService,
-    private router: Router
-  ){}
+    private router: Router,
+    route: ActivatedRoute
+  ){
+    route.queryParams.subscribe(q => {
+      this.query = q['q']
+      this.searchMovie()
+    });
+  }
 
-  ngOnInit(){
-    this.query = localStorage.getItem('q') || ''
-    if(this.query == '')
-      this.router.navigate(['/home'])
-
-    this.movieService.searchMovie(this.query,1).then((movies) => {
+  searchMovie(){
+    this.movieService.searchMovie(this.query, 1).then((movies) => {
       this.movies = movies
     }).catch((error) => {
       console.log(error)
