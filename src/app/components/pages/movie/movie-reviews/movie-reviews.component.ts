@@ -105,7 +105,7 @@ export class MovieReviewsComponent {
         }
       });
     } else {
-      this.http.get('assets/reviewEditor.html', { responseType: 'text' })
+      this.http.get('./assets/reviewEditor.html', { responseType: 'text' })
       .subscribe((html) => {
         Swal.fire({
           title: 'Please enter your rating and review:',

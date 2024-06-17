@@ -6,7 +6,7 @@
         <a [href]="'/actor?id=' + actor.id" class="link-light link-underline link-underline-opacity-0">
           <img *ngIf="actor.profile_path" [src]="actor.profile_path" [alt]="actor.name + ' poster'" width="140px"
             class="border border-2 border-black" />
-          <img *ngIf="!actor.profile_path" src="assets/defaultImage.png" alt="default poster" width="140px"
+          <img *ngIf="!actor.profile_path" src="./assets/defaultImage.png" alt="default poster" width="140px"
             class="border border-2 border-black" />
           <p class="m-0 mt-3"><strong>Name:</strong> {{ actor.name }}</p>
           <p class="m-0">

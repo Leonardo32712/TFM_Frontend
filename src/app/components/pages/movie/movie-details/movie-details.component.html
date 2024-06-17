@@ -4,7 +4,7 @@
       <img *ngIf="movie.poster_path" 
       [src]="'https://media.themoviedb.org/t/p/w300_and_h450_bestv2' + movie.poster_path" 
       alt="{{ movie.title }}" width="230px" class="border border-black border-5">
-      <img *ngIf="!movie.poster_path" src="assets/defaultImage.png" 
+      <img *ngIf="!movie.poster_path" src="./assets/defaultImage.png" 
       alt="default poster" width="230px" class="border border-black border-5">
     </div>
     <div class="col-9">

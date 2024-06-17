@@ -109,7 +109,7 @@ export class ProfileComponent {
   }
 
   requestVerification(){
-    this.http.get('assets/requestVerificationInfo.html', { responseType: 'text' })
+    this.http.get('./assets/requestVerificationInfo.html', { responseType: 'text' })
       .subscribe((html) => {
         Swal.fire({
           icon: 'info',
