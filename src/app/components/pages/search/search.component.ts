@@ -21,7 +21,7 @@ export class SearchComponent {
   ngOnInit(){
     this.query = localStorage.getItem('q') || ''
     if(this.query == '')
-      this.router.navigate(['home'])
+      this.router.navigate(['/home'])
 
     this.movieService.searchMovie(this.query,1).then((movies) => {
       this.movies = movies

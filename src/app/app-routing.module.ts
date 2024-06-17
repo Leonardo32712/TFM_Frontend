@@ -10,7 +10,7 @@ import { ActorComponent } from './components/pages/actor/actor.component';
 import { VerificationRequestsComponent } from './components/pages/verification-requests/verification-requests.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'search', component: SearchComponent},
   { path: 'login', component: LoginComponent},

@@ -44,7 +44,7 @@ export class HeaderComponent {
     if (this.router.url === '/search') {
       window.location.reload();
     } else {
-      this.router.navigate(['search']);
+      this.router.navigate(['/search']);
     }
   }
 
