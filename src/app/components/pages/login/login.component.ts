@@ -16,9 +16,13 @@ export class LoginComponent {
   constructor(private userService: UserService, private router: Router){}
 
   ngOnInit(){
-    this.userService.getBasicUserData().then((user) => {
-      if(user){
-        this.router.navigate(['/home'])
+    this.userService.currentUser.subscribe({
+      next: (user) => {
+        if(user.uid != '') {
+          this.router.navigate(['/home'])
+        }
+      }, error: (error) => {
+        console.log(error)
       }
     })
   }
@@ -39,8 +43,6 @@ export class LoginComponent {
           icon: 'success',
           text: message,
           showCloseButton: true
-        }).then(() => {
-          window.location.reload()
         })
       }).catch((error) => {
         Swal.fire({

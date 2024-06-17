@@ -1,36 +1,51 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { userProfile } from '../models/user/userProfile';
-import { userUpdate } from '../models/user/userUpdate';
+import { UserProfile } from '../models/user/userProfile';
+import { UserUpdate } from '../models/user/userUpdate';
 import { environment } from 'src/environments/environment.prod';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private userSource = new BehaviorSubject<UserProfile>(this.getCurrentUser())
+  public currentUser = this.userSource.asObservable()
 
   constructor(private http: HttpClient, private auth: Auth) { }
+
+  private getCurrentUser(): UserProfile{
+    const user = this.auth.currentUser
+    return {
+      uid: user?.uid || '',
+      email: user?.email || '',
+      emailVerified: user?.emailVerified == true,
+      displayName: user?.displayName || '',
+      photoURL: user?.photoURL || ''
+    }
+  }
 
   public logInEmailAndPassword(email: string, password: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       signInWithEmailAndPassword(this.auth, email, password)
         .then((_userCredentials) => {
-          resolve('Sesión iniciada correctamente.')
+          this.userSource.next(this.getCurrentUser())
+          resolve('User logged in successfuly.')
         }).catch((error) => {
           reject(error)
         })
     })
   }
 
-  public signUp(newUser: userUpdate): Promise<string> {
+  public signUp(newUser: UserUpdate): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       const formData: FormData = new FormData();
       if(newUser.displayName == null || newUser.email == null || newUser.password == null){
         reject('Bad request. There are empty fields.')
       }
 
-      const fields: (keyof userUpdate)[] = ['displayName', 'email', 'password', 'photo'];
+      const fields: (keyof UserUpdate)[] = ['displayName', 'email', 'password', 'photo'];
 
       fields.forEach(field => {
         const value = newUser[field];
@@ -58,26 +73,7 @@ export class UserService {
     });
   }
 
-  public getUserProfile(): Promise<userProfile> {
-    return new Promise<userProfile>((resolve, reject) => {
-      user(this.auth).subscribe((loggedUser) => {
-        if (loggedUser) {
-          const user: userProfile = {
-            uid: loggedUser.uid,
-            email: loggedUser.email,
-            emailVerified: loggedUser.emailVerified,
-            displayName: loggedUser.displayName,
-            photoURL: loggedUser.photoURL
-          }
-          resolve(user);
-        } else {
-          reject('User not logged in')
-        }
-      })
-    })
-  }
-
-  public updateUserData(newUserData: userUpdate): Promise<string> {
+  public updateUserData(newUserData: UserUpdate): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       if (!this.auth.currentUser) {
         return reject('User not logged in.')
@@ -85,7 +81,7 @@ export class UserService {
       this.auth.currentUser.getIdToken()
       .then((idToken) => {
         const formData: FormData = new FormData();
-        const fields: (keyof userUpdate)[] = ['displayName', 'email', 'photo'];
+        const fields: (keyof UserUpdate)[] = ['displayName', 'email', 'photo'];
 
         fields.forEach(field => {
           const value = newUserData[field];
@@ -119,27 +115,9 @@ export class UserService {
     })
   }
 
-  public getBasicUserData(): Promise<userProfile | undefined> {
-    return new Promise<userProfile | undefined>((resolve, _reject) => {
-      user(this.auth).subscribe((loggedUser) => {
-        if (loggedUser) {
-          const user: userProfile = {
-            uid: loggedUser.uid,
-            email: loggedUser.email,
-            emailVerified: loggedUser.emailVerified,
-            displayName: loggedUser.displayName,
-            photoURL: loggedUser.photoURL
-          }
-          resolve(user);
-        } else {
-          resolve(undefined)
-        }
-      })
-    })
-  }
-
-  public logOut(): void {
-    this.auth.signOut();
+  public async logOut(): Promise<void> {
+    await this.auth.signOut();
+    this.userSource.next(this.getCurrentUser())
   }
 
   public deleteAccount(): Promise<string> {

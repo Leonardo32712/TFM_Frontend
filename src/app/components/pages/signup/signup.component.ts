@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { userUpdate } from 'src/app/models/user/userUpdate';
+import { UserUpdate } from 'src/app/models/user/userUpdate';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
@@ -20,9 +20,13 @@ export class SignupComponent {
   constructor(private userService: UserService, private router: Router){}
 
   ngOnInit(){
-    this.userService.getBasicUserData().then((user) => {
-      if(user){
-        this.router.navigate(['/home'])
+    this.userService.currentUser.subscribe({
+      next: (user) => {
+        if(user.uid != '') {
+          this.router.navigate(['/home'])
+        }
+      }, error: (error) => {
+        console.log(error)
       }
     })
   }
@@ -55,7 +59,7 @@ export class SignupComponent {
       return;
     }
 
-    const userRegister: userUpdate = {
+    const userRegister: UserUpdate = {
       displayName: this.username,
       email: this.email,
       password: this.password,

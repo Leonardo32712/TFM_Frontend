@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { userProfile } from 'src/app/models/user/userProfile';
+import { UserProfile } from 'src/app/models/user/userProfile';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HeaderComponent {
 
-  user: userProfile = {} as userProfile
+  user: UserProfile = {} as UserProfile
   query: string = ''
   userLogged: boolean = false
   showButtons: boolean = true
@@ -21,19 +21,27 @@ export class HeaderComponent {
   ){}
 
   ngOnInit(){
-    this.userService.getBasicUserData()
-    .then((userData) => {
-      if(userData){
-        this.user = userData
-        this.userLogged = true
+    this.userService.currentUser.subscribe({
+      next: (user) => {
+        if(user.uid != '') {
+          this.user = user
+          this.userLogged = true
+        } else {
+          this.userLogged = false
+        }
+      }, error: (error) => {
+        console.log(error)
       }
-    }).catch(() => this.userLogged = false)
+    })
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         const currentRoute = event.urlAfterRedirects;
         if(currentRoute == '/login' || currentRoute == '/signup')
           this.showButtons = false
+        else {
+          this.showButtons = true
+        }
       }
     });
   }

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { userProfile } from 'src/app/models/user/userProfile';
-import { userUpdate } from 'src/app/models/user/userUpdate';
+import { UserProfile } from 'src/app/models/user/userProfile';
+import { UserUpdate } from 'src/app/models/user/userUpdate';
 import { UserService } from 'src/app/services/user.service';
 import { VerificationService } from 'src/app/services/verification.service';
 import Swal from 'sweetalert2';
@@ -13,8 +13,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-  userProfile: userProfile = {} as userProfile
-  editedUserProfile: userUpdate = {} as userUpdate
+  userProfile: UserProfile = {} as UserProfile
+  editedUserProfile: UserUpdate = {} as UserUpdate
   uploadedFile: File | null = null;
   readMode: boolean = true;
 
@@ -26,15 +26,20 @@ export class ProfileComponent {
   ){}
 
   ngOnInit(){
-    this.userService.getUserProfile()
-    .then((user) => {
-      this.userProfile = user;
-      this.editedUserProfile = {...user,
-        photo: null,
-        password: null
-      };
-    }).catch(() => {
-      this.router.navigate(['/home'])
+    this.userService.currentUser.subscribe({
+      next: (user) => {
+        if(user.uid != '') {
+          this.userProfile = user
+          this.editedUserProfile = {...user,
+            photo: null,
+            password: null
+          };
+        } else {
+          this.router.navigate(['/home'])
+        }
+      }, error: (error) => {
+        console.log(error)
+      }
     })
   }
   
@@ -167,7 +172,7 @@ export class ProfileComponent {
             icon: 'success',
             showCloseButton: true
           }).then(() => {
-            window.location.reload();
+            this.userService.logOut();
           })
         }).catch((error: string) => {
           Swal.fire({
@@ -184,6 +189,9 @@ export class ProfileComponent {
 
   logOut(){
     this.userService.logOut()
-    window.location.reload()
+    Swal.fire({
+      icon: 'success',
+      title: 'User logged out'
+    })
   }
 }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Review } from 'src/app/models/review/review';
-import { userProfile } from 'src/app/models/user/userProfile';
+import { UserProfile } from 'src/app/models/user/userProfile';
 import { ReviewsService } from 'src/app/services/reviews.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
@@ -16,7 +16,7 @@ export class MovieReviewsComponent {
   @Input() movieId: string = '';
   public criticsReviews: Record<string, Review> = {} as Record<string, Review>;
   public spectatorReviews: Record<string, Review> = {} as Record<string, Review>;
-  public user: userProfile = {} as userProfile;
+  public user: UserProfile = {} as UserProfile;
   public hasPostedReview: boolean = false;
 
   constructor(
@@ -28,22 +28,26 @@ export class MovieReviewsComponent {
 
   ngOnInit(){
     this.reviewsService.getReviews(this.movieId).then((reviews) => {
-      this.userService.getBasicUserData().then((user) => {
-        if (user) {
-          this.user = user;
-          this.criticsReviews = this.sortReviews(
-            reviews.critics,
-            user.uid
-          );
-          this.spectatorReviews = this.sortReviews(
-            reviews.spectators,
-            user.uid
-          );
-        } else {
-          this.criticsReviews = reviews.critics;
-          this.spectatorReviews = reviews.spectators;
+      this.userService.currentUser.subscribe({
+        next: (user) => {
+          if (user.uid != '') {
+            this.user = user;
+            this.criticsReviews = this.sortReviews(
+              reviews.critics,
+              user.uid
+            );
+            this.spectatorReviews = this.sortReviews(
+              reviews.spectators,
+              user.uid
+            );
+          } else {
+            this.criticsReviews = reviews.critics;
+            this.spectatorReviews = reviews.spectators;
+          }
+        }, error: (error) => {
+          console.log(error)
         }
-      });
+      })
     })
   }
 
