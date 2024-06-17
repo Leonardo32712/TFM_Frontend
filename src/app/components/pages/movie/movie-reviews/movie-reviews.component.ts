@@ -97,8 +97,6 @@ export class MovieReviewsComponent {
         showConfirmButton: true,
         confirmButtonText: 'Log in',
         cancelButtonText: 'Cancel',
-        footer:
-          "Don't have an account? Try <a href='/register'>Registering</a>",
       }).then((result) => {
         if (result.isConfirmed) {
           this.router.navigate(['/login']);

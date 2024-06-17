@@ -30,4 +30,7 @@ export class SearchComponent {
     })
   }
 
+  public navigateMovie(movieId: number) {
+    this.router.navigate(['/movie'], { queryParams: { id: movieId.toString() } });
+  }
 }

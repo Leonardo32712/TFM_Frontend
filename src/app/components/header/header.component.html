@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/" (onClick)="showButtons = true">
+        <a class="navbar-brand clickable" (click)="navigateHome()">
             <img src='assets/clapperboard.png' width="30" height="30" class="d-inline-block align-top" alt="">
             MovieMeter
         </a>
@@ -16,10 +16,10 @@
                     </button>
                 </div>
             </div>
-            <a *ngIf="!this.userLogged && !showButtons" class="btn btn-danger m-1" href="/home" (click)="showButtons = true">Home page</a>
-            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" (click)="login()">LogIn</a>
-            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/signup" (click)="showButtons = false">SignUp</a>
-            <a *ngIf="this.userLogged" class="btn btn-danger m-1 user-info" href="/profile">
+            <a *ngIf="!this.userLogged && !showButtons" class="btn btn-danger m-1" (click)="navigateHome()">Home page</a>
+            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" (click)="navigateLogIn()">LogIn</a>
+            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" (click)="navigateSignUp()">SignUp</a>
+            <a *ngIf="this.userLogged" class="btn btn-danger m-1 user-info" (click)="navigateProfile()">
                 <img src="{{this.user.photoURL}}" alt="User Image" class="user-image">
                 Profile
             </a>

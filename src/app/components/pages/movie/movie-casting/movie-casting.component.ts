@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actor } from 'src/app/models/actor/actor';
 import { ActorService } from 'src/app/services/actor.service';
 
@@ -12,7 +13,8 @@ export class MovieCastingComponent {
   public casting: Actor[] = [];
 
   constructor(
-    private actorService: ActorService
+    private actorService: ActorService,
+    private router: Router
   ){}
 
   ngOnInit(){
@@ -21,5 +23,9 @@ export class MovieCastingComponent {
     }).catch((error) => {
       console.log(error)
     })
+  }
+
+  navigateActor(actorId: string){
+      this.router.navigate(['/actor'], { queryParams: { id: actorId } })
   }
 }

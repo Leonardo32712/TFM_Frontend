@@ -48,9 +48,23 @@ export class HeaderComponent {
     }
   }
 
-  login(){
+  navigateLogIn(){
     this.showButtons = false;
     this.router.navigate(['/login'])
+  }
+
+  navigateHome(){
+    this.showButtons = true
+    this.router.navigate(['/home'])
+  }
+
+  navigateSignUp(){
+    this.showButtons = false
+    this.router.navigate(['/signup'])
+  }
+
+  navigateProfile(){
+    this.router.navigate(['/profile'])
   }
 
   handleKeyDown(event: KeyboardEvent): void {

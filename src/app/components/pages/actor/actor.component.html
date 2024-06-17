@@ -34,11 +34,11 @@
                         <div class="row m-3 flex-nowrap overflow-auto">
                           <div class="bg-dark pt-3 m-1 col-3 text-white text-center fw-semibold" 
                           *ngFor="let movie of this.movies">
-                            <a [href]="'/movie?id=' + movie.id" class="link-light link-underline link-underline-opacity-0">
+                            <div class="link-light link-underline link-underline-opacity-0 clickable" (click)="navigateMovie(movie.id)">
                               <img *ngIf="movie.poster_path" [src]="movie.poster_path" [alt]="movie.title + ' poster'" width="200px" class="border border-2 border-black">
                               <img *ngIf="!movie.poster_path" src='assets/defaultImage.png' alt="default poster" width="200px" class="border border-2 border-black">
                               <p *ngIf="!movie.poster_path" class="link-danger link-underline-opacity-0">{{movie.title}}</p>
-                            </a>
+                            </div>
                           </div>
                         </div>
                       </div>

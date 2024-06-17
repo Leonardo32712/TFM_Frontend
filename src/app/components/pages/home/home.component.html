@@ -11,14 +11,14 @@
     </div>
     <div class="carousel-inner">
       <div *ngFor="let movie of carousel; let i = index" [class.active]="i === 0" class="carousel-item">
-        <a [href]="'/movie?id=' + movie.id" class="image-container">
+        <div (click)="navigateMovie(movie.id)" class="image-container clickable">
           <img [src]="movie.backdrop_path" class="d-block w-100" [alt]="movie.title + ' background'">
           <div class="overlay"></div>
           <div class="carousel-caption d-none d-md-block">
             <h1>{{ movie.title }}</h1>
             <p>{{ movie.overview }}</p>
           </div>
-        </a>
+        </div>
       </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
@@ -33,7 +33,7 @@
   
   <div class="movie-list">
     <div *ngFor="let movie of list" class="movie-card">
-      <a [href]="'/movie?id=' + movie.id">
+      <a (click)="navigateMovie(movie.id)" class="clickable">
         <img *ngIf="movie.poster_path" [src]="movie.poster_path" class="movie-poster" [alt]="movie.title + ' poster'">
         <img *ngIf="!movie.poster_path" src='assets/defaultImage.png' class="movie-poster" alt="default poster">
       </a>      
