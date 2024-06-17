@@ -48,6 +48,11 @@ export class HeaderComponent {
     }
   }
 
+  login(){
+    this.showButtons = false;
+    this.router.navigate(['/login'])
+  }
+
   handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       this.search()

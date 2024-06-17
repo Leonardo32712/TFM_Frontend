@@ -17,7 +17,7 @@
                 </div>
             </div>
             <a *ngIf="!this.userLogged && !showButtons" class="btn btn-danger m-1" href="/home" (onClick)="showButtons = true">Home page</a>
-            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/login" (onClick)="showButtons = false">LogIn</a>
+            <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" (onClick)="login()">LogIn</a>
             <a *ngIf="!this.userLogged && showButtons" class="btn btn-danger m-1" href="/signup" (onClick)="showButtons = false">SignUp</a>
             <a *ngIf="this.userLogged" class="btn btn-danger m-1 user-info" href="/profile">
                 <img src="{{this.user.photoURL}}" alt="User Image" class="user-image">
