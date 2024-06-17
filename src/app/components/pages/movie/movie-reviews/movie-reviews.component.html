@@ -45,7 +45,7 @@
           <p>
             <strong>{{ criticsReviews[reviewId].username }}
               <span class="badge text-bg-secondary me-1">
-                {{ criticsReviews[reviewId].score }}
+                {{ criticsReviews[reviewId].score + ' ☆' }}
               </span>
               <span class="badge badge-critic">Critic</span>
             </strong>
@@ -73,7 +73,7 @@
           <p>
             <strong>{{ spectatorReviews[reviewId].username }}
               <span class="badge text-bg-secondary me-1">
-                {{ spectatorReviews[reviewId].score }}
+                {{ spectatorReviews[reviewId].score + ' ☆'}}
               </span>
               <span class="badge text-bg-success">Spectator</span>
             </strong>

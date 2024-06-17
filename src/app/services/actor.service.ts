@@ -26,7 +26,8 @@ export class ActorService {
               reject('Unexpected error getting movie casting.')
             }
           }, error: (error) => {
-            reject(error)
+            console.log(error.error || error.message)
+            reject(error.message)
           }
         })
     })
@@ -43,7 +44,8 @@ export class ActorService {
             reject('Unexpected error getting actor data.')
           }
         }, error: (error) => {
-          reject(error)
+          console.log(error.error || error.message)
+          reject(error.message)
         }
       })
     })
@@ -60,7 +62,8 @@ export class ActorService {
             reject('Unexpected error getting movie casting.')
           }
         }, error: (error) => {
-          reject(error)
+          console.log(error.error || error.message)
+          reject(error.message)
         }
       })
     })
