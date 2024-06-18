@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActorProfile } from '../models/actor/actorProfile';
 import { MoviePoster } from '../models/movie/moviePoster';
 import { environment } from 'src/environments/environment.prod';
+import { CustomError } from '../models/customError';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class ActorService {
             } else {
               reject('Unexpected error getting movie casting.')
             }
-          }, error: (error) => {
-            console.log(error.error || error.message)
+          }, error: (error: CustomError) => {
+            console.log(error.originalError || error.message)
             reject(error.message)
           }
         })
@@ -43,8 +44,8 @@ export class ActorService {
           } else {
             reject('Unexpected error getting actor data.')
           }
-        }, error: (error) => {
-          console.log(error.error || error.message)
+        }, error: (error: CustomError) => {
+          console.log(error.originalError || error.message)
           reject(error.message)
         }
       })
@@ -61,8 +62,8 @@ export class ActorService {
           } else {
             reject('Unexpected error getting movie casting.')
           }
-        }, error: (error) => {
-          console.log(error.error || error.message)
+        }, error: (error: CustomError) => {
+          console.log(error.originalError || error.message)
           reject(error.message)
         }
       })

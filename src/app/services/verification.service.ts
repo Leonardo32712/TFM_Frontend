@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { VerificationRequest } from '../models/verificationRequest';
 import { environment } from 'src/environments/environment.prod';
+import { CustomError } from '../models/customError';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,9 @@ export class VerificationService {
             } else {
               reject('Unexpected error saving request.')
             }
-          }, error: (error) => {
-            reject(error)
+          }, error: (error: CustomError) => {
+            console.log(error.originalError || error.message)
+            reject(error.message)
           }
         })
       }).catch((_error) => {
@@ -65,8 +67,9 @@ export class VerificationService {
             } else {
               reject('Unexpected error getting requests.')
             }
-          }, error: (error) => {
-            reject(error)
+          }, error: (error: CustomError) => {
+            console.log(error.originalError || error.message)
+            reject(error.message)
           }
         })
       }).catch((error) => {
@@ -97,8 +100,9 @@ export class VerificationService {
             } else {
               reject('Unexpected error updating requests.')
             }
-          }, error: (error) => {
-            reject(error)
+          }, error: (error: CustomError) => {
+            console.log(error.originalError || error.message)
+            reject(error.message)
           }
         })
       }).catch((_error) => {

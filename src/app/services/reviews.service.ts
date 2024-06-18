@@ -4,6 +4,7 @@ import { Auth } from '@angular/fire/auth';
 import { Review } from '../models/review/review';
 import { AllReviews } from '../models/review/allReviews';
 import { environment } from 'src/environments/environment.prod';
+import { CustomError } from '../models/customError';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +24,9 @@ export class ReviewsService {
           } else {
             reject('Unexpected error getting reviews.')
           }
-        }, error: (error) => {
-          reject(error)
+        }, error: (error: CustomError) => {
+          console.log(error.originalError || error.message)
+          reject(error.message)
         }
       })
     })
@@ -66,8 +68,9 @@ export class ReviewsService {
             } else {
               return reject('Unexpecting error updating review.')
             }
-          }, error: (error: any) => {
-            return reject(JSON.stringify(error))
+          }, error: (error: CustomError) => {
+            console.log(error.originalError || error.message)
+            reject(error.message)
           }
         })
       })
@@ -99,8 +102,9 @@ export class ReviewsService {
             } else {
               reject('Unexpected error deleting review')
             }
-          }, error: (error) => {
-            reject(error)
+          }, error: (error: CustomError) => {
+            console.log(error.originalError || error.message)
+            reject(error.message)
           }
         })
       })

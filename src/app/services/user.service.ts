@@ -5,6 +5,7 @@ import { UserProfile } from '../models/user/userProfile';
 import { UserUpdate } from '../models/user/userUpdate';
 import { environment } from 'src/environments/environment.prod';
 import { BehaviorSubject } from 'rxjs';
+import { CustomError } from '../models/customError';
 
 @Injectable({
   providedIn: 'root'
@@ -66,8 +67,9 @@ export class UserService {
             } else {
               reject('Unexpected error signing up user.')
             }
-          }, error: (error) => {
-            reject(error)
+          }, error: (error: CustomError) => {
+            console.log(error.originalError || error.message)
+            reject(error.message)
           }
         })
     });
@@ -105,8 +107,9 @@ export class UserService {
             } else {
               reject('Unexpected error updating user.')
             }
-          }, error: (error) => {
-            reject(error)
+          }, error: (error: CustomError) => {
+            console.log(error.originalError || error.message)
+            reject(error.message)
           }
         })
       }).catch((_error) => {
@@ -141,8 +144,9 @@ export class UserService {
             } else {
               reject('Unexpected error deleting your account.')
             }
-          }, error: (error) => {
-            reject(error)
+          }, error: (error: CustomError) => {
+            console.log(error.originalError || error.message)
+            reject(error.message)
           }
         })
       }).catch((_error) => {

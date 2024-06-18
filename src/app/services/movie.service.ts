@@ -4,6 +4,7 @@ import { MoviePoster } from '../models/movie/moviePoster';
 import { CarouselMovie } from "../models/movie/carouselMovie"
 import { Movie } from "../models/movie/movie"
 import { environment } from 'src/environments/environment.prod';
+import { CustomError } from '../models/customError';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,9 @@ export class MovieService {
           } else {
             reject('Unexpected error getting movie carousel.')
           }
-        }, error: (error) => {
-          reject(error)
+        }, error: (error: CustomError) => {
+          console.log(error.originalError || error.message)
+          reject(error.message)
         }
       })
     })
@@ -38,8 +40,9 @@ export class MovieService {
           } else {
             reject('Unexpected error getting movie home list.')
           }
-        }, error: (error) => {
-          reject(error)
+        }, error: (error: CustomError) => {
+          console.log(error.originalError || error.message)
+          reject(error.message)
         }
       })
     })
@@ -55,8 +58,9 @@ export class MovieService {
           } else {
             reject('Unexpected error getting movie query.')
           }
-        }, error: (error) => {
-          reject(error)
+        }, error: (error: CustomError) => {
+          console.log(error.originalError || error.message)
+          reject(error.message)
         }
       })
     })
@@ -72,8 +76,9 @@ export class MovieService {
         } else {
           reject('Unexpected error getting movie data.')
         }
-      }, error: (error) => {
-        reject(error)
+      }, error: (error: CustomError) => {
+        console.log(error.originalError || error.message)
+        reject(error.message)
       }
     })
   })

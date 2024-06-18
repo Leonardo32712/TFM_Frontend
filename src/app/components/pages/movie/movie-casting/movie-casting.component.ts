@@ -25,7 +25,7 @@ export class MovieCastingComponent {
     })
   }
 
-  navigateActor(actorId: string){
+  navigateActor(actorId: number){
       this.router.navigate(['/actor'], { queryParams: { id: actorId } })
   }
 }
