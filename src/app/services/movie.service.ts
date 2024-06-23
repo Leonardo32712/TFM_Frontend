@@ -24,8 +24,8 @@ export class MovieService {
             reject('Unexpected error getting movie carousel.')
           }
         }, error: (error: CustomError) => {
-          console.log(error.originalError || error.message)
-          reject(error.message)
+          console.log(error.originalError || error.name)
+          reject(error.name)
         }
       })
     })
@@ -41,8 +41,8 @@ export class MovieService {
             reject('Unexpected error getting movie home list.')
           }
         }, error: (error: CustomError) => {
-          console.log(error.originalError || error.message)
-          reject(error.message)
+          console.log(error.originalError || error.name)
+          reject(error.name)
         }
       })
     })
@@ -59,8 +59,8 @@ export class MovieService {
             reject('Unexpected error getting movie query.')
           }
         }, error: (error: CustomError) => {
-          console.log(error.originalError || error.message)
-          reject(error.message)
+          console.log(error.originalError || error.name)
+          reject(error.name)
         }
       })
     })
@@ -77,8 +77,8 @@ export class MovieService {
           reject('Unexpected error getting movie data.')
         }
       }, error: (error: CustomError) => {
-        console.log(error.originalError || error.message)
-        reject(error.message)
+        console.log(error.originalError || error.name)
+        reject(error.name)
       }
     })
   })

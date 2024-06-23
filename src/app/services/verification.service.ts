@@ -28,7 +28,7 @@ export class VerificationService {
         });
 
         const body = {text: requestText}
-        this.http.post<{message: string}>(environment.backendURL + '/users/verification', body, { headers , observe: 'response' })
+        this.http.post<{message: string}>(environment.backendURL + '/verification', body, { headers , observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.status == 201) {
@@ -37,8 +37,8 @@ export class VerificationService {
               reject('Unexpected error saving request.')
             }
           }, error: (error: CustomError) => {
-            console.log(error.originalError || error.message)
-            reject(error.message)
+            console.log(error.originalError || error.name)
+            reject(error.name)
           }
         })
       }).catch((_error) => {
@@ -68,8 +68,8 @@ export class VerificationService {
               reject('Unexpected error getting requests.')
             }
           }, error: (error: CustomError) => {
-            console.log(error.originalError || error.message)
-            reject(error.message)
+            console.log(error.originalError || error.name)
+            reject(error.name)
           }
         })
       }).catch((error) => {
@@ -101,8 +101,8 @@ export class VerificationService {
               reject('Unexpected error updating requests.')
             }
           }, error: (error: CustomError) => {
-            console.log(error.originalError || error.message)
-            reject(error.message)
+            console.log(error.originalError || error.name)
+            reject(error.name)
           }
         })
       }).catch((_error) => {

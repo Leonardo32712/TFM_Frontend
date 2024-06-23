@@ -25,8 +25,8 @@ export class ReviewsService {
             reject('Unexpected error getting reviews.')
           }
         }, error: (error: CustomError) => {
-          console.log(error.originalError || error.message)
-          reject(error.message)
+          console.log(error.originalError || error.name)
+          reject(error.name)
         }
       })
     })
@@ -69,8 +69,8 @@ export class ReviewsService {
               return reject('Unexpecting error updating review.')
             }
           }, error: (error: CustomError) => {
-            console.log(error.originalError || error.message)
-            reject(error.message)
+            console.log(error.originalError || error.name)
+            reject(error.name)
           }
         })
       })
@@ -103,8 +103,8 @@ export class ReviewsService {
               reject('Unexpected error deleting review')
             }
           }, error: (error: CustomError) => {
-            console.log(error.originalError || error.message)
-            reject(error.message)
+            console.log(error.originalError || error.name)
+            reject(error.name)
           }
         })
       })

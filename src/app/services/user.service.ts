@@ -68,8 +68,8 @@ export class UserService {
               reject('Unexpected error signing up user.')
             }
           }, error: (error: CustomError) => {
-            console.log(error.originalError || error.message)
-            reject(error.message)
+            console.log(error.originalError || error.name)
+            reject(error.name)
           }
         })
     });
@@ -108,8 +108,8 @@ export class UserService {
               reject('Unexpected error updating user.')
             }
           }, error: (error: CustomError) => {
-            console.log(error.originalError || error.message)
-            reject(error.message)
+            console.log(error.originalError || error.name)
+            reject(error.name)
           }
         })
       }).catch((_error) => {
@@ -145,8 +145,8 @@ export class UserService {
               reject('Unexpected error deleting your account.')
             }
           }, error: (error: CustomError) => {
-            console.log(error.originalError || error.message)
-            reject(error.message)
+            console.log(error.originalError || error.name)
+            reject(error.name)
           }
         })
       }).catch((_error) => {
