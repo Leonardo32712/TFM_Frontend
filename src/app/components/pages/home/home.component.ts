@@ -23,7 +23,7 @@ export class HomeComponent {
   ngOnInit() {
     Swal.fire({
       title: 'Loading data from server...',
-      text: 'If the aplication haven not been used, this may take one minute. After the wating everything will work fluently. Sorry for the inconvenience.',
+      text: 'If the aplication have not been used, this may take one minute. After the wating everything will work fluently. Sorry for the inconvenience.',
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();

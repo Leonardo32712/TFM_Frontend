@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --output-path docs --base-href /TFM_Frontend/",
+    "deploy" : "ng build --output-path docs --base-href /TFM_Frontend/ && git add . && git commit -m 'Deploy' && git push origin master",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
