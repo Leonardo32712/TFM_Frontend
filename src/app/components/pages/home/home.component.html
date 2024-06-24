@@ -1,4 +1,4 @@
-<div id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
+<div *ngIf="carousel.length != 0" id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button *ngFor="let movie of carousel; let i = index"
               type="button"

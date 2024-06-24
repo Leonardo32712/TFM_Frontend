@@ -20,27 +20,34 @@ export class HomeComponent {
     private router: Router
   ){}
 
-  ngOnInit(){
+  ngOnInit() {
     Swal.fire({
       title: 'Loading data from server...',
-      text: 'Please wait.',
+      text: 'If the aplication haven not been used, this may take one minute. After the wating everything will work fluently. Sorry for the inconvenience.',
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
       }
     });
-    this.movieService.getCarousel().then((carousel) => {
-      this.carousel = carousel
-    }).catch((error) => {
-      console.log(error)
-    })
 
-    this.movieService.getHomeList().then((list) => {
-      this.list = list
-    }).catch((error) => {
-      console.log(error)
+    Promise.all([
+      this.movieService.getCarousel(),
+      this.movieService.getHomeList()
+    ])
+    .then(([carousel, list]) => {
+      this.carousel = carousel;
+      this.list = list;
     })
-    Swal.close()
+    .catch((error) => {
+      Swal.fire({
+        title: 'Error',
+        text: error.name
+      })
+      console.log(error);
+    })
+    .finally(() => {
+      Swal.close();
+    });
   }
 
   public navigateMovie(movieId: number) {

@@ -59,7 +59,7 @@ export class UserService {
         }
       });
 
-      this.http.post<{message: string}>(environment.backendURL + '/users/signup', formData, { observe: 'response' })
+      this.http.post<{message: string}>(environment.backendURL + '/users', formData, { observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.body && response.status == 201) {
@@ -99,10 +99,10 @@ export class UserService {
         const headers = new HttpHeaders({
           'Authorization': 'Bearer ' + idToken
         });
-        this.http.put<{message: string}>(environment.backendURL + '/users/updateData', formData, { headers , observe: 'response' })
+        this.http.put<{message: string}>(environment.backendURL + '/users', formData, { headers , observe: 'response' })
         .subscribe({
           next: (response) => {
-            if (response.status == 201 && response.body) {
+            if (response.status == 200 && response.body) {
               resolve(response.body.message)
             } else {
               reject('Unexpected error updating user.')
