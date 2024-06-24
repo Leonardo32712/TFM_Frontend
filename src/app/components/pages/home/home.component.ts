@@ -14,6 +14,8 @@ export class HomeComponent {
 
   carousel: CarouselMovie[] = []
   list: MoviePoster[] = []
+  private loadingAlertVisible: boolean = false;
+  private alertTimeout: any;
 
   constructor(
     private movieService: MovieService,
@@ -21,14 +23,19 @@ export class HomeComponent {
   ){}
 
   ngOnInit() {
-    Swal.fire({
-      title: 'Loading data from server...',
-      text: 'If the aplication have not been used, this may take one minute. After the wating everything will work fluently. Sorry for the inconvenience.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
+    this.alertTimeout = setTimeout(() => {
+      if (!Swal.isVisible()) {
+        this.loadingAlertVisible = true;
+        Swal.fire({
+          title: 'Loading data from server...',
+          text: 'If the application has not been used, this may take one minute. After the waiting, everything will work fluently. Sorry for the inconvenience.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
       }
-    });
+    }, 1000);
 
     Promise.all([
       this.movieService.getCarousel(),
@@ -39,6 +46,7 @@ export class HomeComponent {
       this.list = list;
     })
     .catch((error) => {
+      clearTimeout(this.alertTimeout);
       Swal.fire({
         title: 'Error',
         text: error.name
@@ -46,7 +54,12 @@ export class HomeComponent {
       console.log(error);
     })
     .finally(() => {
-      Swal.close();
+      if (this.loadingAlertVisible) {
+        Swal.close();
+        this.loadingAlertVisible = false;
+      } else {
+        clearTimeout(this.alertTimeout);
+      }
     });
   }
 
